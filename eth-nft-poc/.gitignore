@@ -12,3 +12,5 @@ artifacts
 # IDEs
 .idea
 
+#mac
+.DS_Store
