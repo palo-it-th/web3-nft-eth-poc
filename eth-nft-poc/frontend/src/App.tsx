@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Button, Card, CardContent } from "@mui/material";
 import { ethers } from "ethers";
+import ReadMyNft from "./components/ReadMyNft";
 
 declare let window: any;
 
@@ -74,6 +75,12 @@ const App = () => {
             <div>Account is : {currentAccount}</div>
             <div>balance is : {balance}</div>
             <div>chainId is : {chainId}</div>
+            <div>
+              <ReadMyNft
+                addressContract="0x1E8aC706db25F190A71890dF33d9b1eA69ac2Fb7"
+                currentAccount={currentAccount}
+              />
+            </div>
           </CardContent>
         </Card>
       )}
