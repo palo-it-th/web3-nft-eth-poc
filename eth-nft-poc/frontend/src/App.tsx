@@ -77,7 +77,7 @@ const App = () => {
             <div>chainId is : {chainId}</div>
             <div>
               <ReadMyNft
-                addressContract="0x1E8aC706db25F190A71890dF33d9b1eA69ac2Fb7"
+                addressContract="0xA1ab09E67C8512B4699C05AC8b4C9529cc750ae7"
                 currentAccount={currentAccount}
               />
             </div>

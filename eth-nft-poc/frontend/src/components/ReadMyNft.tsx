@@ -23,6 +23,8 @@ const ReadMyNft = ({ addressContract, currentAccount }: Props) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const myNFT: Contract = new ethers.Contract(addressContract, abi, provider);
 
+    console.log(myNFT);
+
     setContract(myNFT);
 
     provider.getCode(addressContract).then((result: string) => {
@@ -48,12 +50,13 @@ const ReadMyNft = ({ addressContract, currentAccount }: Props) => {
 
   const queryTokens = useCallback(
     async (myNFT: Contract) => {
-      for (let i = 1; i <= (balance || 0); i++) {
-        const nft = await myNFT.tokenURI(i);
+      for (let i = 0; i < (balance || 0); i++) {
+        const nftId = await myNFT.tokenOfOwnerByIndex(currentAccount, i);
+        const nft = await myNFT.tokenURI(nftId);
         setNftList((prev) => [...prev, nft]);
       }
     },
-    [balance]
+    [currentAccount, balance]
   );
 
   useEffect(() => {
