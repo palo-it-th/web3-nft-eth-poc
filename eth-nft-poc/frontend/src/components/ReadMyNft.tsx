@@ -1,76 +1,57 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ethers } from "ethers";
 import { Contract } from "ethers";
-import { Card, CardContent } from "@mui/material";
-import { abi } from "../assets/MyNFT";
+import { Button, Card, CardContent } from "@mui/material";
 
 interface Props {
-  addressContract: string;
-  currentAccount: string | undefined;
+  currentAccount: string;
+  contract: Contract;
 }
 
-declare let window: any;
-
-const ReadMyNft = ({ addressContract, currentAccount }: Props) => {
+const ReadMyNft = ({ contract, currentAccount }: Props) => {
   const [symbol, setSymbol] = useState<string>("");
-  const [balance, setBalance] = useState<number | undefined>(undefined);
+  const [balance, setBalance] = useState<number>(0);
   const [nftList, setNftList] = useState<string[]>([]);
-  const [contract, setContract] = useState<Contract | undefined>(undefined);
 
-  useEffect(() => {
-    if (!window.ethereum) return;
+  const queryTokenSymbol = useCallback(async () => {
+    setSymbol(await contract.symbol());
+  }, [contract]);
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const myNFT: Contract = new ethers.Contract(addressContract, abi, provider);
+  const queryTokenBalance = useCallback(async () => {
+    setBalance(Number(await contract.balanceOf(currentAccount)));
+  }, [contract, currentAccount]);
 
-    console.log(myNFT);
+  const queryTokens = useCallback(async () => {
+    let nftList = [];
+    for (let i = 0; i < balance; i++) {
+      const nftId = await contract.tokenOfOwnerByIndex(currentAccount, i);
 
-    setContract(myNFT);
-
-    provider.getCode(addressContract).then((result: string) => {
-      //check whether it is a contract
-      if (result === "0x") return;
-
-      myNFT
-        .symbol()
-        .then((result: string) => {
-          setSymbol(result);
-        })
-        .catch((e: Error) => console.log(e));
-    });
-    //called only once
-  }, [addressContract]);
-
-  const queryTokenBalance = useCallback(
-    async (myNFT: Contract) => {
-      setBalance(Number(await myNFT.balanceOf(currentAccount)));
-    },
-    [currentAccount]
-  );
-
-  const queryTokens = useCallback(
-    async (myNFT: Contract) => {
-      for (let i = 0; i < (balance || 0); i++) {
-        const nftId = await myNFT.tokenOfOwnerByIndex(currentAccount, i);
-        const nft = await myNFT.tokenURI(nftId);
-        setNftList((prev) => [...prev, nft]);
-      }
-    },
-    [currentAccount, balance]
-  );
-
-  useEffect(() => {
-    if (contract && currentAccount) {
-      queryTokenBalance(contract);
-      queryTokens(contract);
+      nftList.push(await contract.tokenURI(nftId));
     }
-  }, [currentAccount, contract, queryTokenBalance, queryTokens]);
+    setNftList(nftList);
+  }, [contract, currentAccount, balance]);
+
+  useEffect(() => {
+    queryTokenSymbol();
+    queryTokenBalance();
+    queryTokens();
+  }, [queryTokenSymbol, queryTokenBalance, queryTokens]);
+
+  const onClickMintNft = async (tokenURI: string) => {
+    try {
+      const tx = await contract.mintNFT(currentAccount, tokenURI);
+      await tx.wait();
+      queryTokenBalance();
+      queryTokens();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Card>
       <CardContent>
         <div>
-          <b>MyNFT Contract</b>: {addressContract}
+          <b>MyNFT Contract</b>: {contract.address}
         </div>
         <div>
           <b>Symbol</b>:{symbol}
@@ -78,6 +59,16 @@ const ReadMyNft = ({ addressContract, currentAccount }: Props) => {
         <div>
           <b>Balance</b>:{balance}
         </div>
+        <Button
+          variant="contained"
+          onClick={() =>
+            onClickMintNft(
+              "ipfs://QmYEjq2JejfZhRyg3hoxn9eLWzuLRTyS2Db5j7dkhndc5h"
+            )
+          }
+        >
+          Mint a new NFT
+        </Button>
         <div>
           {nftList.map((nft, index) => (
             <p key={index}>{nft}</p>

@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Container, Button, Card, CardContent } from "@mui/material";
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
+import { abi } from "./assets/MyNFT";
 import ReadMyNft from "./components/ReadMyNft";
+import { Web3Provider } from "@ethersproject/providers";
 
 declare let window: any;
 
@@ -9,32 +11,39 @@ const App = () => {
   const [balance, setBalance] = useState<string | undefined>();
   const [currentAccount, setCurrentAccount] = useState<string | undefined>();
   const [chainId, setChainId] = useState<number | undefined>();
+  const [contract, setContract] = useState<Contract | undefined>();
+
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+
+  const fetchData = useCallback(
+    async (provider: Web3Provider) => {
+      if (currentAccount) {
+        setBalance(
+          ethers.utils.formatEther(await provider.getBalance(currentAccount))
+        );
+
+        setChainId((await provider.getNetwork()).chainId);
+      }
+    },
+    [currentAccount]
+  );
 
   useEffect(() => {
     //get ETH balance and network info only when having currentAccount
     if (!currentAccount || !ethers.utils.isAddress(currentAccount)) return;
-
-    //client side code
-    if (!window.ethereum) {
-      console.log("please install MetaMask");
-      return;
-    }
-
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-    provider
-      .getBalance(currentAccount)
-      .then((result) => {
-        setBalance(ethers.utils.formatEther(result));
-      })
-      .catch((e) => console.log(e));
 
-    provider
-      .getNetwork()
-      .then((result) => {
-        setChainId(result.chainId);
-      })
-      .catch((e) => console.log(e));
-  }, [currentAccount]);
+    fetchData(provider);
+
+    const signer = provider.getSigner();
+
+    const myNftContract: Contract = new ethers.Contract(
+      contractAddress,
+      abi,
+      signer
+    );
+    setContract(myNftContract);
+  }, [currentAccount, fetchData]);
 
   const onClickConnect = () => {
     //client side code
@@ -55,10 +64,7 @@ const App = () => {
 
   //click disconnect
   const onClickDisconnect = () => {
-    console.log("onClickDisConnect");
     setCurrentAccount(undefined);
-    setBalance(undefined);
-    setChainId(undefined);
   };
 
   return (
@@ -75,12 +81,14 @@ const App = () => {
             <div>Account is : {currentAccount}</div>
             <div>balance is : {balance}</div>
             <div>chainId is : {chainId}</div>
-            <div>
-              <ReadMyNft
-                addressContract="0xA1ab09E67C8512B4699C05AC8b4C9529cc750ae7"
-                currentAccount={currentAccount}
-              />
-            </div>
+            {contract && (
+              <div>
+                <ReadMyNft
+                  contract={contract}
+                  currentAccount={currentAccount}
+                />
+              </div>
+            )}
           </CardContent>
         </Card>
       )}
