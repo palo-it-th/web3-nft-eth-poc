@@ -11,3 +11,9 @@ REPORT_GAS=true npx hardhat test
 npx hardhat node
 npx hardhat run scripts/deploy.ts
 ```
+
+To deploy on localhost network:
+
+```shell
+npx hardhat --network localhost run scripts/deploy_mynft.js
+```
