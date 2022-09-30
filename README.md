@@ -1,1 +1,1 @@
-# web3-poc
+# Web3 POCs and exercises
