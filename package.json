@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@nomicfoundation/solidity-analyzer": "^0.1.0"
+  }
+}
