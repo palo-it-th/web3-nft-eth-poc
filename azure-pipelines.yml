@@ -23,12 +23,12 @@ steps:
 
 - script: |
     npx hardhat compile
-  displayName: 'npx install'
+  displayName: 'hardhat compile'
   workingDirectory: eth-nft-poc/
 
 - script: |
     npx hardhat test
-  displayName: 'npx install'
+  displayName: 'hardhat test'
   workingDirectory: eth-nft-poc/
 
 # - task: Npm@1
