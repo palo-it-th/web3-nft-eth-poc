@@ -21,6 +21,7 @@ steps:
   workingDirectory: eth-nft-poc/
 
 - script: |
+    npm install npx
     npx hardhat test
   displayName: 'hardhat test'
   workingDirectory: eth-nft-poc/
