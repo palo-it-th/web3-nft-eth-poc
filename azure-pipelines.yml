@@ -15,16 +15,12 @@ steps:
   displayName: 'npm install'
   workingDirectory: eth-nft-poc/
 
-- script: |
-    npx hardhat compile
-  displayName: 'hardhat compile'
-  workingDirectory: eth-nft-poc/
-
 - task: Npm@1
   displayName: 'npm custom'
   inputs:
     command: |
       npm install -g npx
+      npx hardhat compile
       npx hardhat test
     verbose: true
     customCommand: 'install npx'
