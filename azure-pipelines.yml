@@ -4,27 +4,44 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+container: node:18-bullseye-slim@sha256:f32c970581a901560815b9af1aebbc164c86b9be922dda3b9f3b65f653e61776
+
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
+# - task: NodeTool@0
+#   inputs:
+#     versionSpec: '10.x'
+#   displayName: 'Install Node.js'
 
 - script: |
     npm install
   displayName: 'npm install'
   workingDirectory: eth-nft-poc/
 
-- task: Npm@1
-  displayName: 'npm custom'
-  inputs:
-    command: |
-      npm install -g npx
-      npx hardhat compile
-      npx hardhat test
-    verbose: true
-    customCommand: 'install npx'
-    workingDirectory: eth-nft-poc/
+  - script: |
+    npm install -g npx
+  displayName: 'npx install'
+  workingDirectory: eth-nft-poc/
+
+  - script: |
+    npx hardhat compile
+  displayName: 'npx install'
+  workingDirectory: eth-nft-poc/
+
+  - script: |
+    npx hardhat test
+  displayName: 'npx install'
+  workingDirectory: eth-nft-poc/
+
+# - task: Npm@1
+#   displayName: 'npm custom'
+#   inputs:
+#     command: |
+#       npm install -g npx
+#       npx hardhat compile
+#       npx hardhat test
+#     verbose: true
+#     customCommand: 'install npx'
+#     workingDirectory: eth-nft-poc/
 
 # - script: |
 #     npm install npx
