@@ -17,11 +17,6 @@ steps:
   workingDirectory: eth-nft-poc/
 
 - script: |
-    npm install -g npx
-  displayName: 'npx install'
-  workingDirectory: eth-nft-poc/
-
-- script: |
     npx hardhat compile
   displayName: 'hardhat compile'
   workingDirectory: eth-nft-poc/
