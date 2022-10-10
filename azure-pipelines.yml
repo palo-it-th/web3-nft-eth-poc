@@ -14,31 +14,14 @@ steps:
 - script: |
     npm install
   displayName: 'npm install'
-  workingDirectory: eth-nft-poc/
+  workingDirectory: $(poc-directory)
 
 - script: |
     npx hardhat compile
-  displayName: 'hardhat compile'
-  workingDirectory: eth-nft-poc/
+  displayName: 'Compile smart contracts'
+  workingDirectory: $(poc-directory)
 
 - script: |
     npx hardhat test
-  displayName: 'hardhat test'
-  workingDirectory: eth-nft-poc/
-
-# - task: Npm@1
-#   displayName: 'npm custom'
-#   inputs:
-#     command: |
-#       npm install -g npx
-#       npx hardhat compile
-#       npx hardhat test
-#     verbose: true
-#     customCommand: 'install npx'
-#     workingDirectory: eth-nft-poc/
-
-# - script: |
-#     npm install npx
-#     npx hardhat test
-#   displayName: 'hardhat test'
-#   workingDirectory: eth-nft-poc/
+  displayName: 'Test smart copntracts'
+  workingDirectory: $(poc-directory)
