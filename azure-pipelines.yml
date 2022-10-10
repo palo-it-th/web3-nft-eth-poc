@@ -8,7 +8,7 @@ container: node:18-bullseye-slim@sha256:f32c970581a901560815b9af1aebbc164c86b9be
 
 variables:
 - name: poc-directory
-  value: eth-nft-poc/
+  value: eth-nft-poc
 
 steps:
 - script: |
@@ -23,5 +23,11 @@ steps:
 
 - script: |
     npx hardhat test
-  displayName: 'Test smart copntracts'
+  displayName: 'Test smart contracts'
   workingDirectory: $(poc-directory)
+
+steps:
+  - task: PublishHtmlReport@1
+    displayName: 'Publish coverage report'
+    inputs:
+      reportDir: '$(poc-directory)/coverage/index.html'
