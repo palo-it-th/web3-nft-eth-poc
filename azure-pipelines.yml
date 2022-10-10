@@ -26,7 +26,7 @@ steps:
   displayName: 'Test smart contracts'
   workingDirectory: $(poc-directory)
 
-- task: PublishHtmlReport@1
-  displayName: 'Publish coverage report'
-  inputs:
-    reportDir: '$(poc-directory)/coverage/index.html'
+# - task: PublishHtmlReport@1
+#   displayName: 'Publish coverage report'
+#   inputs:
+#     reportDir: '$(poc-directory)/coverage/index.html'
