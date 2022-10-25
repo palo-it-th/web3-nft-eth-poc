@@ -1,24 +1,22 @@
 # Ethereum NFT minter
 
-
 ## Purpose
 
 The goal of this project is to create a web page in order to be able to mint NFT's.
 
 Frontend to
+
 - Interact with Metamask wallet
 - Mint NFTs by selecting pictures and uploading to IPFS
 - Display minted NFTs
 - Transfer owned NFTs to other wallets
 - Transfer owned NFTs to marketplaces, e.e. OpenSea, Rarible
 
-
 ## Solidity Contracts
 
 ### Test
 
 #### Simple test
-
 
 ```
 npx hardhat test
@@ -43,9 +41,8 @@ npx hardhat run scripts/deploy_mynft.js
 To deploy on localhost network:
 
 ```
-npx hardhat --network localhost run scripts/deploy_mynft.js
+npx hardhat --network localhost run scripts/deploy_palonft.js
 ```
-
 
 #### Start local node
 
@@ -53,5 +50,19 @@ npx hardhat --network localhost run scripts/deploy_mynft.js
 npx hardhat node
 ```
 
+### Start a local ipfs node (using jsipfs)
+
+#### Install jsipfs
+
+yarn global add ipfs
+
+#### Start jsipfs node
+
+jsipfs daemon
+
+#### Allow cross origin on the jsipfs node
+
+jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
+jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
 
 ## Frontend

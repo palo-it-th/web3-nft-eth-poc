@@ -1,82 +1,135 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Contract } from "ethers";
-import { Button, Card, CardContent } from "@mui/material";
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Contract } from 'ethers'
+import { CircularProgress, ImageList, ImageListItem } from '@mui/material'
+import { create, IPFSHTTPClient } from 'ipfs-http-client'
+import MintNft from './MintNft'
 
 interface Props {
-  currentAccount: string;
-  contract: Contract;
+  currentAccount: string
+  contract: Contract
+}
+
+interface ContractDetails {
+  symbol: string
+  balance: number
+  nftImageList: any[]
 }
 
 const ReadMyNft = ({ contract, currentAccount }: Props) => {
-  const [symbol, setSymbol] = useState<string>("");
-  const [balance, setBalance] = useState<number>(0);
-  const [nftList, setNftList] = useState<string[]>([]);
+  const [contractDetails, setContractDetails] = useState<
+    ContractDetails | undefined
+  >()
 
-  const queryTokenSymbol = useCallback(async () => {
-    setSymbol(await contract.symbol());
-  }, [contract]);
+  const ipfsClient: IPFSHTTPClient = useMemo(
+    () => create({ url: '/ip4/127.0.0.1/tcp/5002/http' }),
+    [],
+  )
 
-  const queryTokenBalance = useCallback(async () => {
-    setBalance(Number(await contract.balanceOf(currentAccount)));
-  }, [contract, currentAccount]);
+  const readNftMetadata = useCallback(
+    async (cidPath: string) => {
+      const response = ipfsClient.cat(cidPath)
 
-  const queryTokens = useCallback(async () => {
-    let nftList = [];
+      for await (const x of response) {
+        return JSON.parse(new TextDecoder().decode(x))
+      }
+    },
+    [ipfsClient],
+  )
+
+  const readNftImage = useCallback(
+    async (cidPath: string) => {
+      const response = ipfsClient.cat(cidPath)
+
+      for await (const x of response) {
+        return URL.createObjectURL(new Blob([x.buffer]))
+      }
+    },
+    [ipfsClient],
+  )
+
+  const readNft = useCallback(
+    async (index: Number) => {
+      const nftId = await contract.tokenOfOwnerByIndex(currentAccount, index)
+      const nftMetadataCID = await contract.tokenURI(nftId)
+      const nftImageCID = (await readNftMetadata(nftMetadataCID)).image
+      return readNftImage(nftImageCID)
+    },
+    [contract, currentAccount, readNftImage, readNftMetadata],
+  )
+
+  const initContractDetails = useCallback(async () => {
+    const symbol = await contract.symbol()
+    const balance = Number(await contract.balanceOf(currentAccount))
+
+    setContractDetails({
+      symbol,
+      balance,
+      nftImageList: [],
+    })
+
+    let nftImageList: string[] = []
+
     for (let i = 0; i < balance; i++) {
-      const nftId = await contract.tokenOfOwnerByIndex(currentAccount, i);
+      const nftImage = await readNft(i)
 
-      nftList.push(await contract.tokenURI(nftId));
+      if (nftImage) {
+        nftImageList = [...nftImageList, nftImage]
+      }
+
+      setContractDetails({
+        symbol,
+        balance,
+        nftImageList: [...nftImageList],
+      })
     }
-    setNftList(nftList);
-  }, [contract, currentAccount, balance]);
+  }, [contract, currentAccount, readNft])
+
+  const onMintingFinished = async () => {
+    if (contractDetails) {
+      const nftImage = await readNft(contractDetails.balance)
+      setContractDetails({
+        ...contractDetails,
+        balance: contractDetails.balance + 1,
+        nftImageList: [...contractDetails.nftImageList, nftImage],
+      })
+    }
+  }
 
   useEffect(() => {
-    queryTokenSymbol();
-    queryTokenBalance();
-    queryTokens();
-  }, [queryTokenSymbol, queryTokenBalance, queryTokens]);
-
-  const onClickMintNft = async (tokenURI: string) => {
-    try {
-      const tx = await contract.mintNFT(currentAccount, tokenURI);
-      await tx.wait();
-      queryTokenBalance();
-      queryTokens();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    initContractDetails()
+  }, [initContractDetails])
 
   return (
-    <Card>
-      <CardContent>
-        <div>
-          <b>MyNFT Contract</b>: {contract.address}
-        </div>
-        <div>
-          <b>Symbol</b>:{symbol}
-        </div>
-        <div>
-          <b>Balance</b>:{balance}
-        </div>
-        <Button
-          variant="contained"
-          onClick={() =>
-            onClickMintNft(
-              "ipfs://QmYEjq2JejfZhRyg3hoxn9eLWzuLRTyS2Db5j7dkhndc5h"
-            )
-          }
-        >
-          Mint a new NFT
-        </Button>
-        <div>
-          {nftList.map((nft, index) => (
-            <p key={index}>{nft}</p>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
+    <>
+      {contractDetails ? (
+        <>
+          <div>
+            <b>Symbol</b>:{contractDetails.symbol}
+          </div>
+          <div>
+            <b>Balance</b>:{contractDetails.balance}
+          </div>
 
-export default ReadMyNft;
+          <MintNft
+            contract={contract}
+            currentAccount={currentAccount}
+            ipfsClient={ipfsClient}
+            onMintingFinished={onMintingFinished}
+          />
+
+          <ImageList cols={3}>
+            {contractDetails.nftImageList.map((nftImage, index) => (
+              <ImageListItem key={index}>
+                <img src={nftImage} alt='' style={{ height: 300 }} />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </>
+      ) : (
+        <CircularProgress />
+      )}
+    </>
+  )
+}
+
+export default ReadMyNft
