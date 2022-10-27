@@ -66,3 +66,7 @@ jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
 jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
 
 ## Frontend
+
+#### Open cypress to debug e2e tests
+
+npx synpress open -cf cypress.config.ts

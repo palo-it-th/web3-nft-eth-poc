@@ -104,10 +104,12 @@ const ReadMyNft = ({ contract, currentAccount }: Props) => {
       {contractDetails ? (
         <>
           <div>
-            <b>Symbol</b>:{contractDetails.symbol}
+            <b>Symbol</b>:
+            <span data-testid='nft-symbol'>{contractDetails.symbol}</span>
           </div>
           <div>
-            <b>Balance</b>:{contractDetails.balance}
+            <b>Balance</b>:
+            <span data-testid='nft-balance'>{contractDetails.balance}</span>
           </div>
 
           <MintNft
@@ -119,7 +121,7 @@ const ReadMyNft = ({ contract, currentAccount }: Props) => {
 
           <ImageList cols={3}>
             {contractDetails.nftImageList.map((nftImage, index) => (
-              <ImageListItem key={index}>
+              <ImageListItem key={index} data-testid={`nftImage-${index}`}>
                 <img src={nftImage} alt='' style={{ height: 300 }} />
               </ImageListItem>
             ))}

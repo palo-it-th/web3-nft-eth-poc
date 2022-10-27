@@ -62,7 +62,7 @@ const App = () => {
     }
 
     //we can do it using ethers.js
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    let provider = new ethers.providers.Web3Provider(window.ethereum)
     provider
       .send('eth_requestAccounts', [])
       .then(accounts => {
@@ -80,18 +80,27 @@ const App = () => {
   return (
     <Container>
       {!currentAccount ? (
-        <Button variant='contained' onClick={onClickConnect}>
+        <Button
+          variant='contained'
+          onClick={onClickConnect}
+          data-testid='connect-to-wallet-button'>
           Connect to wallet
         </Button>
       ) : (
-        <Button variant='contained' onClick={onClickDisconnect}>
+        <Button
+          variant='contained'
+          onClick={onClickDisconnect}
+          data-testid='disconnect-from-wallet-button'>
           Disconnect from wallet
         </Button>
       )}
       {currentAccount && (
-        <Card>
+        <Card data-testid='account-information'>
           <CardContent>
-            <div>Account is : {currentAccount}</div>
+            <div>
+              Account is :{' '}
+              <span data-testid='account-address'>{currentAccount}</span>
+            </div>
             <div>balance is : {balance}</div>
             {contract && (
               <div>

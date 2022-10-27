@@ -45,7 +45,11 @@ const MintNft = ({
 
   return (
     <Box sx={{ m: 1, position: 'relative' }}>
-      <Button component='label' variant='contained' disabled={loading}>
+      <Button
+        component='label'
+        variant='contained'
+        disabled={loading}
+        data-testid='mint-nft'>
         Mint a new NFT
         <input
           type='file'

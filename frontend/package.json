@@ -19,7 +19,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "synpress run -cf cypress.config.ts",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -38,5 +38,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^13.0.3",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.1.5",
+    "@synthetixio/synpress": "^2.4.1",
+    "cypress": "^10.10.0"
   }
 }
