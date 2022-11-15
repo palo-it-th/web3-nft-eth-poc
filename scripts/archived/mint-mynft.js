@@ -1,3 +1,5 @@
+// This script is not used and only for educational purposes. The minting (interaction with the smart contract) happens in the frontend but could be
+// manually triggered here.
 require("dotenv").config();
 const API_URL = process.env.API_URL;
 const PUBLIC_KEY = process.env.PUBLIC_KEY;
