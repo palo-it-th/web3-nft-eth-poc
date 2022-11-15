@@ -16,15 +16,15 @@ Frontend to
 
 - (Node LTS version)[https://nodejs.org/en/]
 
-### Run
+## Run
 
-#### Start local node
+### Start local node
 
 ```
 npx hardhat node
 ```
 
-#### Deploy NFT smart contract
+### Deploy NFT smart contract
 
 To deploy on localhost network:
 
@@ -36,27 +36,36 @@ npx hardhat --network localhost run scripts/deploy_palonft.js
 
 #### Install jsipfs
 
+```
 npm i -g ipfs
+```
 
 #### Start jsipfs node
 
+```
 jsipfs daemon
+```
 
 #### Allow cross origin on the jsipfs node
 
+```
 jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
+```
+```
 jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
+```
 
-## Frontend
+### Frontend
 
 #### Start frontend
 
+```
 npm start
-
+```
 
 ## Test
 
-### Solidity Contracts
+### Solidity smart contracts
 
 ```
 npx hardhat test
@@ -64,14 +73,12 @@ npx hardhat test
 
 Test coverage is generated in the `coverage` folder and can be viewed using a browser.
 
-#### Test with gas estimation
-
-```
-REPORT_GAS=true npx hardhat test
-```
+Add `REPORT_GAS=true` in front of the command to test with gas estimation.
 
 ### E2E Tests including the frontend and smart contracts
 
-#### Open cypress to run e2e tests
+Open cypress to run e2e tests
 
+```
 npx synpress open -cf cypress.config.ts
+```
