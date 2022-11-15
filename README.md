@@ -12,6 +12,10 @@ Frontend to
 - Transfer owned NFTs to other wallets
 - Transfer owned NFTs to marketplaces, e.e. OpenSea, Rarible
 
+## Prerequisites
+
+- (Node LTS version)[https://nodejs.org/en/]
+
 ## Solidity Contracts
 
 ### Test
@@ -34,10 +38,6 @@ REPORT_GAS=true npx hardhat test
 
 #### Deploy NFT smart contract
 
-```
-npx hardhat run scripts/deploy_mynft.js
-```
-
 To deploy on localhost network:
 
 ```
@@ -54,7 +54,7 @@ npx hardhat node
 
 #### Install jsipfs
 
-yarn global add ipfs
+npm i -g ipfs
 
 #### Start jsipfs node
 
@@ -66,6 +66,11 @@ jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
 jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
 
 ## Frontend
+
+#### Start frontend
+
+npm start
+
 
 #### Open cypress to debug e2e tests
 
