@@ -40,10 +40,10 @@ npx hardhat --network localhost run scripts/deploy_palonft.js
 npm i -g ipfs
 ```
 
-#### Start jsipfs node
+#### Initialize ipfs local profile
 
 ```
-jsipfs daemon
+ipfs init
 ```
 
 #### Allow cross origin on the jsipfs node
@@ -53,6 +53,12 @@ jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
 ```
 ```
 jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
+```
+
+#### Start jsipfs node
+
+```
+jsipfs daemon
 ```
 
 ### Frontend
