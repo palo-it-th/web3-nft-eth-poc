@@ -2,115 +2,45 @@ import { loadFixture, time } from "@nomicfoundation/hardhat-network-helpers";
 import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 
-describe("PaloToken", function () {
+describe("PaloNFT", function () {
+
+    let _name='PaloNFT';
+    let _symbol='PNFT';
+    let owner: SignerWithAddress, account1: SignerWithAddress, otherAccounts: SignerWithAddress[];
 
     async function deployTokenContract() {
-        const maxSupply = 100;
-
         // Contracts are deployed using the first signer/account by default
-        const [owner, otherAccount] = await ethers.getSigners();
+        [owner, account1, ...otherAccounts] = await ethers.getSigners();
 
-        const PaloTokenFactory = await ethers.getContractFactory("PaloToken");
-        const paloToken = await PaloTokenFactory.deploy(owner.getAddress(), maxSupply);
+        const PaloNFTFactory = await ethers.getContractFactory("PaloNFT");
+        const paloNFT = await PaloNFTFactory.deploy();
 
-        return { paloToken, maxSupply, owner, otherAccount };
-    }
-
-    async function deployTokenContractAndMint() {
-        const maxSupply = 100;
-
-        // Contracts are deployed using the first signer/account by default
-        const [owner, otherAccount] = await ethers.getSigners();
-
-        const PaloTokenFactory = await ethers.getContractFactory("PaloToken");
-        const paloToken = await PaloTokenFactory.deploy(owner.getAddress(), maxSupply);
-        const mintedAmount = 15;
-        await paloToken.mint(owner.address, mintedAmount);
-
-        return { paloToken, maxSupply, owner, otherAccount };
+        return { paloNFT};
     }
 
     describe("Deployment", function () {
-        it("Should set the right maximum supply", async function () {
-            const { paloToken, maxSupply } = await loadFixture(deployTokenContract);
+        it("Should have the correct token symbol and name", async function () {
+            const { paloNFT } = await loadFixture(deployTokenContract);
 
-            expect(await paloToken.maximumSupply()).to.equal(maxSupply);
+            expect(await paloNFT.name()).to.equal(_name);
+            expect(await paloNFT.symbol()).to.equal(_symbol);
         });
 
-        it("Should set the right owner", async function () {
-            const { paloToken, owner } = await loadFixture(deployTokenContract);
+        it("Should mint a token with token ID 1 & 2 to account1", async function () {
+            const { paloNFT } = await loadFixture(deployTokenContract);
 
-            expect(await paloToken.owner()).to.equal(owner.address);
-        });
+            const address1 = account1.address;
+            await paloNFT.mintNFT(address1, "uri1");
+            expect(await paloNFT.ownerOf(1)).to.equal(address1);
+      
+            await paloNFT.mintNFT(address1, "uri2");
+            expect(await paloNFT.ownerOf(2)).to.equal(address1);
+      
+            expect(await paloNFT.balanceOf(address1)).to.equal(2);      
+          });
     });
-
-    describe("Mint", function () {
-        describe("Validations", function () {
-            it("Only owner can mint token", async function () {
-                const { owner, otherAccount, paloToken, maxSupply } = await loadFixture(deployTokenContract);
-
-                await expect(paloToken.connect(otherAccount).mint(otherAccount.address, 10)).to.be.revertedWith(
-                    "Only the owner can mint tokens!"
-                );
-
-            });
-
-            it("Can not mint over maximum supply", async function () {
-                const { owner, otherAccount, paloToken, maxSupply } = await loadFixture(deployTokenContract);
-
-                await expect(paloToken.mint(otherAccount.address, 101)).to.be.revertedWith(
-                    "Maximum supply cap has been reached!"
-                );
-            });
-        });
-
-        describe("Events", function () {
-            it("Event emitted on token mint", async function () {
-                const { otherAccount, paloToken } = await loadFixture(deployTokenContract);
-                const amount = 10;
-
-                await expect(paloToken.mint(otherAccount.address, amount)).to.emit(paloToken, "Mint").withArgs(
-                    otherAccount.address, amount, anyValue
-                );
-
-            });
-        });
-    });
-
-    describe("Transfer", function () {
-        describe("Logic", function () {
-            it("Transfer successful", async function () {
-                const { owner, otherAccount, paloToken, maxSupply } = await loadFixture(deployTokenContractAndMint);
-                const transferAmount = 10;
-
-                expect(await paloToken.transfer(owner.address, otherAccount.address, transferAmount)).to.be.ok;
-                expect(await paloToken.balance(otherAccount.address)).to.equal(10);
-                expect(await paloToken.balance(owner.address)).to.equal(5);
-
-            });
-        });
-
-        describe("Validations", function () {
-            it("Only owner can mint token", async function () {
-                const { owner, otherAccount, paloToken, maxSupply } = await loadFixture(deployTokenContractAndMint);
-                const transferAmount = 1000;
-
-                await expect(paloToken.transfer(owner.address, otherAccount.address, transferAmount)).to.be.revertedWith(
-                    "You don't have sufficient funds!"
-                );
-            });
-
-            it("Only owner can mint token", async function () {
-                const { owner, otherAccount, paloToken, maxSupply } = await loadFixture(deployTokenContractAndMint);
-                const transferAmount = 10;
-
-                await expect(await paloToken.transfer(owner.address, otherAccount.address, transferAmount)).to.emit(paloToken, "Transfer").withArgs(
-                    owner.address, otherAccount.address, transferAmount, anyValue
-                );
-            });
-        });
-    })
 
 });

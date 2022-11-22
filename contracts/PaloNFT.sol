@@ -17,9 +17,7 @@ contract PaloNFT is ERC721, ERC721URIStorage, ERC721Enumerable {
         public
         payable
         returns (uint256)
-    {
-        require(msg.value >= 10, "Not enough ETH sent; check price!");
-        
+    {        
         _tokenIds.increment();
 
         uint256 newItemId = _tokenIds.current();
