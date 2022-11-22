@@ -14,7 +14,13 @@ Frontend to
 
 ## Prerequisites
 
+You must have the latest "LTS" node version installed :
+
 - (Node LTS version)[https://nodejs.org/en/]
+
+## Installation
+
+- Run `npm install`
 
 ## Run
 
@@ -48,12 +54,16 @@ ipfs init
 
 #### Allow cross origin on the jsipfs node
 
+- Start the ipfs daemon `jsipfs daemon`
+- Change the ipfs cors config :
+
 ```
 jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
-```
-```
+
 jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
 ```
+
+- Restart the daemon
 
 #### Start jsipfs node
 
@@ -62,6 +72,23 @@ jsipfs daemon
 ```
 
 ### Frontend
+
+#### Installation
+
+```
+npm install
+```
+
+#### Setting up Metamask extension
+
+- Install Chrome Metamask extension
+- Add the local hardhat network
+  Settings -> Networks -> Add Network -> Add a network manually
+  Network URL: http://localhost:8545
+  Chain ID: 1337
+  Currency Symbol: ETH
+- Reset the nonce (This step must be done every time the local hardhat node is restarted)
+  Settings -> Advanced -> reset accounts
 
 #### Start frontend
 
