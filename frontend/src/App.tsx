@@ -4,6 +4,7 @@ import { Contract, ethers } from 'ethers'
 import PaloNFT from './assets/PaloNFT.json'
 import ReadMyNft from './components/ReadMyNft'
 import { Web3Provider } from '@ethersproject/providers'
+import Header from './components/Header'
 
 declare let window: any
 
@@ -79,40 +80,43 @@ const App = () => {
 
   return (
     <Container>
-      {!currentAccount ? (
-        <Button
-          variant='contained'
-          onClick={onClickConnect}
-          data-testid='connect-to-wallet-button'>
-          Connect to wallet
-        </Button>
-      ) : (
-        <Button
-          variant='contained'
-          onClick={onClickDisconnect}
-          data-testid='disconnect-from-wallet-button'>
-          Disconnect from wallet
-        </Button>
-      )}
-      {currentAccount && (
-        <Card data-testid='account-information'>
-          <CardContent>
-            <div>
-              Account is :{' '}
-              <span data-testid='account-address'>{currentAccount}</span>
-            </div>
-            <div>balance is : {balance}</div>
-            {contract && (
+      <Header />
+      <div style={{ marginTop: 100 }}>
+        {!currentAccount ? (
+          <Button
+            variant='contained'
+            onClick={onClickConnect}
+            data-testid='connect-to-wallet-button'>
+            Connect to wallet
+          </Button>
+        ) : (
+          <Button
+            variant='contained'
+            onClick={onClickDisconnect}
+            data-testid='disconnect-from-wallet-button'>
+            Disconnect from wallet
+          </Button>
+        )}
+        {currentAccount && (
+          <Card data-testid='account-information'>
+            <CardContent>
               <div>
-                <ReadMyNft
-                  contract={contract}
-                  currentAccount={currentAccount}
-                />
+                Account is :{' '}
+                <span data-testid='account-address'>{currentAccount}</span>
               </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
+              <div>balance is : {balance}</div>
+              {contract && (
+                <div>
+                  <ReadMyNft
+                    contract={contract}
+                    currentAccount={currentAccount}
+                  />
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </Container>
   )
 }
