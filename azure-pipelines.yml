@@ -28,17 +28,17 @@ steps:
   workingDirectory: $(poc-directory)
 
 # Set up and run e2e tests
-  - script: |
+- script: |
     nohup npx hardhat node & > hardhat_node.log &
   displayName: 'Hardhat: run local ethereum node'
   workingDirectory: $(poc-directory)
 
-  - script: |
+- script: |
     npx hardhat --network localhost run scripts/deploy_palonft.js
   displayName: 'Hardhat: Deploy NFT smart contract'
   workingDirectory: $(poc-directory)
 
-  - script: |
+- script: |
     npm install
   displayName: 'Frontend: Install dependencies'
   workingDirectory: $(poc-directory)/frontend
