@@ -36,7 +36,7 @@ steps:
   workingDirectory: $(poc-directory)/frontend
 
 - script: |
-    npm i -g ipfs
+    npm i ipfs
   displayName: 'IPFS: Install IPFS agent'
   workingDirectory: $(poc-directory)
 
