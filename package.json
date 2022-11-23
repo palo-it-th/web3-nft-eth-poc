@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx hardhat coverage",
+    "test": "npx hardhat coverage && npx istanbul check-coverage --statements 10 --branches 10 --functions 10 --lines 10",
     "prettier:solidity": "./node_modules/.bin/prettier --write contracts/**/*.sol"
   },
   "lint": "prettier --list-different 'contracts/**/*.sol'",

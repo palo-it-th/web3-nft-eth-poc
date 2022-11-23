@@ -22,23 +22,38 @@ steps:
   displayName: 'Hardhat: Compile smart contracts'
   workingDirectory: $(poc-directory)
 
+# TODO: When finished, change minimum coverage to 100% in package.json
 - script: |
     npx hardhat test
   displayName: 'Hardhat: Test smart contracts'
   workingDirectory: $(poc-directory)
 
 # Set up and run e2e tests
-- script: |
-    nohup npx hardhat node & > hardhat_node.log &
-  displayName: 'Hardhat: run local ethereum node'
-  workingDirectory: $(poc-directory)
-
-- script: |
-    npx hardhat --network localhost run scripts/deploy_palonft.js
-  displayName: 'Hardhat: Deploy NFT smart contract'
-  workingDirectory: $(poc-directory)
 
 - script: |
     npm install
   displayName: 'Frontend: Install dependencies'
   workingDirectory: $(poc-directory)/frontend
+
+- script: |
+    npm i -g ipfs
+  displayName: 'IPFS: Install IPFS agent'
+  workingDirectory: $(poc-directory)
+
+- script: |
+    nohup npx hardhat node & > hardhat_node.log &
+  displayName: 'Hardhat: Run local ethereum node'
+  workingDirectory: $(poc-directory)
+
+- script: |
+    ipfs init
+    jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
+    jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
+    nohup jsipfs daemon & > jsipfs_daemon.log &
+  displayName: 'IPFS: Initialize node'
+  workingDirectory: $(poc-directory)
+
+- script: |
+    npx hardhat --network localhost run scripts/deploy_palonft.js
+  displayName: 'Hardhat: Deploy NFT smart contract to local ethereum network'
+  workingDirectory: $(poc-directory)
