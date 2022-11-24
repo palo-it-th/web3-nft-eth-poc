@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Box, Button, CircularProgress } from '@mui/material'
 import { Contract, ethers } from 'ethers'
 import { IPFSHTTPClient } from 'ipfs-http-client'
+import AddIcon from '@mui/icons-material/Add';
 
 interface Props {
   currentAccount: string
@@ -49,6 +50,7 @@ const MintNft = ({
         component='label'
         variant='contained'
         disabled={loading}
+        startIcon={<AddIcon />}
         data-testid='mint-nft'>
         Mint a new NFT
         <input

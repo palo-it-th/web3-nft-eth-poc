@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Container, Button, Card, CardContent } from '@mui/material'
+import { Container, Button, Card, CardContent, Box } from '@mui/material'
 import { Contract, ethers } from 'ethers'
 import PaloNFT from './assets/PaloNFT.json'
 import ReadMyNft from './components/ReadMyNft'
 import { Web3Provider } from '@ethersproject/providers'
-import Header from './components/Header'
+import NftAppBar from './components/NftAppBar'
+import { MetaMaskIcon } from './assets/icons'
 
 declare let window: any
 
@@ -79,15 +80,15 @@ const App = () => {
   }
 
   return (
-    <Container>
-      <Header />
-      <div style={{ marginTop: 100 }}>
+    <Container maxWidth={false} disableGutters={true}>
+      <NftAppBar>
         {!currentAccount ? (
           <Button
             variant='contained'
             onClick={onClickConnect}
+            startIcon={<MetaMaskIcon />}
             data-testid='connect-to-wallet-button'>
-            Connect to wallet
+            Connect Wallet
           </Button>
         ) : (
           <Button
@@ -97,6 +98,8 @@ const App = () => {
             Disconnect from wallet
           </Button>
         )}
+      </NftAppBar>
+      <Box>
         {currentAccount && (
           <Card data-testid='account-information'>
             <CardContent>
@@ -116,7 +119,7 @@ const App = () => {
             </CardContent>
           </Card>
         )}
-      </div>
+      </Box>
     </Container>
   )
 }

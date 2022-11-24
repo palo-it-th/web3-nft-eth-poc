@@ -52,6 +52,9 @@ const ReadMyNft = ({ contract, currentAccount }: Props) => {
       const nftId = await contract.tokenOfOwnerByIndex(currentAccount, index)
       const nftMetadataCID = await contract.tokenURI(nftId)
       const nftImageCID = (await readNftMetadata(nftMetadataCID)).image
+      console.log('nftId: ', nftId)
+      console.log('nftMetadataCID: ', nftMetadataCID)
+      console.log('nftImageCID: ', nftImageCID)
       return readNftImage(nftImageCID)
     },
     [contract, currentAccount, readNftImage, readNftMetadata],
