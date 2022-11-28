@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Container, Button, Card, CardContent, Box } from '@mui/material'
+import { Container } from '@mui/material'
 import { Contract, ethers } from 'ethers'
 import PaloNFT from './assets/PaloNFT.json'
-import ReadMyNft from './components/ReadMyNft'
+import NftContent from './components/NftContent/NftContent'
 import { Web3Provider } from '@ethersproject/providers'
-import NftAppBar from './components/NftAppBar'
-import { MetaMaskIcon } from './assets/icons'
+import NftAppBar from './components/NftAppBar/NftAppBar'
+import styled from '@emotion/styled'
+import { Colors, Styles } from './constants'
+import { NftTokenIcon } from './assets/icons'
+import Watermark from './components/Watermark'
 
 declare let window: any
 
@@ -80,48 +83,48 @@ const App = () => {
   }
 
   return (
-    <Container maxWidth={false} disableGutters={true}>
-      <NftAppBar>
-        {!currentAccount ? (
-          <Button
-            variant='contained'
-            onClick={onClickConnect}
-            startIcon={<MetaMaskIcon />}
-            data-testid='connect-to-wallet-button'>
-            Connect Wallet
-          </Button>
-        ) : (
-          <Button
-            variant='contained'
-            onClick={onClickDisconnect}
-            data-testid='disconnect-from-wallet-button'>
-            Disconnect from wallet
-          </Button>
+    <ContainerWrapper maxWidth={false} disableGutters={true}>
+      <NftAppBar balance={balance}
+                 currentAccount={currentAccount}
+                 onClickConnect={onClickConnect}
+                 onClickDisconnect={onClickDisconnect}
+      />
+      <ContentContainer>
+        {!currentAccount && (
+          <WatermarkContainer>
+            <Watermark title={'Get started to mint NFT'}
+                       subtitle={'Please Connect to Wallet.'}
+                       icon={<NftTokenIcon />} />
+          </WatermarkContainer>
         )}
-      </NftAppBar>
-      <Box>
-        {currentAccount && (
-          <Card data-testid='account-information'>
-            <CardContent>
-              <div>
-                Account is :{' '}
-                <span data-testid='account-address'>{currentAccount}</span>
-              </div>
-              <div>balance is : {balance}</div>
-              {contract && (
-                <div>
-                  <ReadMyNft
-                    contract={contract}
-                    currentAccount={currentAccount}
-                  />
-                </div>
-              )}
-            </CardContent>
-          </Card>
+        {currentAccount && contract && (
+          <NftContent
+            contract={contract}
+            currentAccount={currentAccount}
+          />
         )}
-      </Box>
-    </Container>
+      </ContentContainer>
+    </ContainerWrapper>
   )
 }
 
 export default App
+
+const ContainerWrapper = styled(Container)`
+  background: ${Colors.black['300']};
+  min-height: 100vh;
+  height: 100%;
+  min-width: 100%;
+  width: fit-content;
+`
+
+const WatermarkContainer = styled.div`
+  ${Styles.absoluteCenter};
+`
+
+const ContentContainer = styled.div`
+  padding: 24px;
+  min-height: calc(100vh - 64px);
+  height: 100%;
+
+`
