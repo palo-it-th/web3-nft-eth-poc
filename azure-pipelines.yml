@@ -46,10 +46,10 @@ steps:
   workingDirectory: $(poc-directory)
 
 - script: |
-    ipfs init
-    jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
-    jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
-    nohup jsipfs daemon & > jsipfs_daemon.log &
+    npx jsipfs init
+    npx jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
+    npx jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
+    nohup npx jsipfs daemon & > jsipfs_daemon.log &
   displayName: 'IPFS: Initialize node'
   workingDirectory: $(poc-directory)
 
