@@ -21,8 +21,8 @@ steps:
 #   displayName: 'Intall: Yarn'
 #   workingDirectory: $(Build.SourcesDirectory)
 
-# Restore hardhat node modules if yarn.lock changed
-- task: RestoreCache@0
+# Cache/restore hardhat node modules if yarn.lock changed
+- task: Cache@2
   displayName: 'Cache: Hardhat node modules'
   inputs:
     key: 'yarn | "$(Agent.OS)" | $(Build.SourcesDirectory)/yarn.lock'
@@ -36,15 +36,8 @@ steps:
   workingDirectory: $(Build.SourcesDirectory)
   condition: ne(variables.HARDHAT_CACHE_RESTORED, 'true')
 
-# Cache hardhat node modules if yarn.lock changed
-- task: SaveCache@0
-  displayName: 'Cache: Hardhat node modules'
-  inputs:
-    key: 'yarn | "$(Agent.OS)" | $(Build.SourcesDirectory)/yarn.lock'
-    path: $(System.DefaultWorkingDirectory)/node_modules
-
 # Cache/restore frontend node modules if yarn.lock changed
-- task: RestoreCache@0
+- task: Cache@2
   displayName: 'Cache: Frontend node modules'
   inputs:
     key: 'yarn | "$(Agent.OS)" | $(Build.SourcesDirectory)/frontend/yarn.lock'
@@ -57,13 +50,6 @@ steps:
   displayName: 'Frontend: yarn install'
   workingDirectory: $(Build.SourcesDirectory)/frontend
   condition: ne(variables.FRONTEND_CACHE_RESTORED, 'true')
-
-# Cache frontend node modules if yarn.lock changed
-- task: SaveCache@0
-  displayName: 'Cache: Save frontend node modules'
-  inputs:
-    key: 'yarn | "$(Agent.OS)" | $(Build.SourcesDirectory)/frontend/yarn.lock'
-    path: $(System.DefaultWorkingDirectory)/frontend/node_modules
 
 # Hardhat compile
 - script: |
