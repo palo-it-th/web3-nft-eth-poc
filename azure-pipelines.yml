@@ -9,22 +9,34 @@ steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '18.x'
-  displayName: 'Install Node.js'
+  displayName: 'Install: Node.js'
 
 - script: |
     npm install --global yarn
-  displayName: 'yarn install'
+  displayName: 'Intall: Yarn'
   workingDirectory: $(Build.SourcesDirectory)
 
 - script: |
     yarn install
-  displayName: 'npm build'
+  displayName: 'Hardhat: yarn install'
   workingDirectory: $(Build.SourcesDirectory)
 
 - script: |
     yarn install
-  displayName: 'npm build'
+  displayName: 'Frontend: yarbn install'
   workingDirectory: $(Build.SourcesDirectory)/frontend
+
+# Cache hardhat node modules
+- task: Cache@2
+  inputs:
+    key: hardhat_node_modules
+    path: $(System.DefaultWorkingDirectory)/node_modules
+
+# Cache frontend node modules
+- task: Cache@2
+  inputs:
+    key: hardhat_node_modules
+    path: $(System.DefaultWorkingDirectory)/frontend/node_modules
 
 # container: node:18-bullseye-slim@sha256:f32c970581a901560815b9af1aebbc164c86b9be922dda3b9f3b65f653e61776
 
