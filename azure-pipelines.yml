@@ -69,7 +69,7 @@ steps:
   inputs:
     repository: $(imageName)
     command: build
-    Dockerfile: frontend/Dockerfile
+    Dockerfile: Dockerfile
 
 # Run e2e tests using above image
 - task: DockerCompose@0
