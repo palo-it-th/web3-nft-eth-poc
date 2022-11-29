@@ -22,9 +22,7 @@ services:
       bash -c 'echo -n "======> local noVNC URL:
       http://localhost:8080/vnc.html?autoconnect=true " && npx wait-on
       http://display:8080 && echo -n "======> remote noVNC URL: " && curl -s
-      ngrok:4040/api/tunnels | jq -r .tunnels[0].public_url && nohup npx hardhat node & > hardhat_node.log & &&
-      nohup npx hardhat --network localhost run scripts/deploy_palonft.js &&
-      npm i -g ipfs'
+      ngrok:4040/api/tunnels | jq -r .tunnels[0].public_url && ./scripts/run_e2e_tests.sh'
     networks:
       - x11
 

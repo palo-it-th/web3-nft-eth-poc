@@ -29,6 +29,7 @@
     "ethers": "^5.7.1",
     "hardhat": "^2.11.2",
     "hardhat-gas-reporter": "^1.0.9",
+    "ipfs": "^0.65.0",
     "prettier": "^2.7.1",
     "prettier-plugin-solidity": "^1.0.0",
     "solhint-plugin-prettier": "0.0.5",
