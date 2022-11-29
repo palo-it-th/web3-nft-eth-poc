@@ -15,11 +15,11 @@ steps:
     versionSpec: '18.x'
   displayName: 'Install: Node.js'
 
-# Install yarn
-- script: |
-    npm install --global yarn
-  displayName: 'Intall: Yarn'
-  workingDirectory: $(Build.SourcesDirectory)
+# # Install yarn
+# - script: |
+#     npm install --global yarn
+#   displayName: 'Intall: Yarn'
+#   workingDirectory: $(Build.SourcesDirectory)
 
 # Cache/restore hardhat node modules if yarn.lock changed
 - task: Cache@2
