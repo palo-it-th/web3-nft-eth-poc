@@ -4,9 +4,7 @@ FROM synthetixio/docker-e2e:16.17-ubuntu as base
 RUN mkdir /app
 WORKDIR /app
 
-COPY package.json ./
-COPY yarn.lock ./
+COPY node_modules ./node_modules
 
 FROM base as test
-RUN yarn --frozen-lockfile --prefer-offline --no-audit
 COPY . .
