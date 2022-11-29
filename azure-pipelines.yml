@@ -28,15 +28,28 @@ steps:
 
 # Cache hardhat node modules
 - task: Cache@2
+  displayName: 'Cache: Hardhat node modules'
   inputs:
     key: hardhat_node_modules
     path: $(System.DefaultWorkingDirectory)/node_modules
 
 # Cache frontend node modules
 - task: Cache@2
+  displayName: 'Cache: Frontend node modules'
   inputs:
     key: hardhat_node_modules
     path: $(System.DefaultWorkingDirectory)/frontend/node_modules
+
+- script: |
+    npx hardhat compile
+  displayName: 'Hardhat: Compile smart contracts'
+  workingDirectory: $(Build.SourcesDirectory)
+
+- script: |
+    npx hardhat test
+  displayName: 'Hardhat: Test smart contracts'
+  workingDirectory: $(Build.SourcesDirectory)
+
 
 # container: node:18-bullseye-slim@sha256:f32c970581a901560815b9af1aebbc164c86b9be922dda3b9f3b65f653e61776
 
