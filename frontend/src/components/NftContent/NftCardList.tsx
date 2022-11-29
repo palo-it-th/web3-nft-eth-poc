@@ -31,7 +31,7 @@ const NftCardList = ({ contractDetails }: NftCardListProps) => {
           <NftCard
             image={nftImageCID.imageSrc}
             title={nftMetadataCID}
-            data-testid={`nftImage-${index}`}
+            testId={`nft-card-${index}`}
           />
         </Grid2>
       ))}

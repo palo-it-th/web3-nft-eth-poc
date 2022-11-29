@@ -1,8 +1,9 @@
 import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
+import { ellipsisAccount } from '../../../src/utils/accountUtils'
 
 Then('The displayed account should be the current metamask account', () => {
   cy.getMetamaskWalletAddress().then(currentAddress => {
-    cy.get('[data-testid="account-address"]').contains(currentAddress!, {
+    cy.get('[data-testid="account-address"]').contains(ellipsisAccount(currentAddress), {
       matchCase: false,
     })
   })

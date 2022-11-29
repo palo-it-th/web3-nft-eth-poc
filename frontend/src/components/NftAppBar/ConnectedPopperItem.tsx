@@ -8,13 +8,15 @@ interface ContainerListProps {
   children?: ReactNode
   secondaryAction?: ReactNode
   onClick?: VoidFunction
+  testId?: string
 }
 
-const ContainerList = ({ isButton, children, secondaryAction, onClick }: ContainerListProps) => {
+const ContainerList = ({ isButton, children, secondaryAction, onClick, testId }: ContainerListProps) => {
   return (
     <>
-      {isButton ? <ListItemButton style={{ gap: 12 }} onClick={onClick}>{children}</ListItemButton> :
-        <ListItem style={{ gap: 12 }} secondaryAction={secondaryAction}>{children}</ListItem>}
+      {isButton ?
+        <ListItemButton data-testid={testId} style={{ gap: 12 }} onClick={onClick}>{children}</ListItemButton> :
+        <ListItem data-testid={testId} style={{ gap: 12 }} secondaryAction={secondaryAction}>{children}</ListItem>}
     </>
   )
 }
@@ -25,12 +27,13 @@ interface ConnectedPopperItemProps {
   secondaryAction?: ReactNode
   isButton?: boolean
   onClick?: VoidFunction
+  testId?: string
 }
 
-const ConnectedPopperItem = ({ icon, text, secondaryAction, isButton = false, onClick }: ConnectedPopperItemProps) => {
+const ConnectedPopperItem = ({ icon, text, secondaryAction, isButton = false, onClick, testId }: ConnectedPopperItemProps) => {
 
   return (
-    <ContainerList isButton={isButton} secondaryAction={secondaryAction} onClick={onClick}>
+    <ContainerList testId={testId} isButton={isButton} secondaryAction={secondaryAction} onClick={onClick}>
       <ListItemIcon style={{ minWidth: 'unset' }}>
         {icon}
       </ListItemIcon>

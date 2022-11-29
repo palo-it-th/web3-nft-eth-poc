@@ -36,8 +36,8 @@ const ConnectedToolBar = ({ balance, currentAccount, onClickDisconnect }: Connec
           onClick={handleClick}
           startIcon={<WalletIcon />}
           endIcon={<ArrowDownIcon />}
-          data-testid='connect-to-wallet-button'>
-          <AccountText>
+          data-testid='connected-wallet-button'>
+          <AccountText data-testid={'account-address'}>
             {ellipsisAccount(currentAccount)}
           </AccountText>
         </Button>

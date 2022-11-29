@@ -49,7 +49,8 @@ const ConnectedPopper = ({ open, currentAccount, anchorEl, onClickDisconnect }: 
               <ConnectedPopperItem icon={<SignOutIcon style={{ width: 24, height: 24 }} />}
                                    text={'Disconnect Wallet'}
                                    isButton={true}
-                                   onClick={onClickDisconnect} />
+                                   onClick={onClickDisconnect}
+                                   testId={'disconnect-from-wallet-button'} />
             </List>
           </Container>
         </Fade>

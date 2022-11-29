@@ -5,11 +5,12 @@ import { Fonts } from '../../constants'
 interface NftCardProps {
   image?: string;
   title?: string
+  testId?: string
 }
 
-const NftCard = ({ image, title }: NftCardProps) => {
+const NftCard = ({ image, title, testId }: NftCardProps) => {
   return (
-    <CardWrapper>
+    <CardWrapper data-testid={testId}>
       <CardMedia
         component='img'
         height='302'
