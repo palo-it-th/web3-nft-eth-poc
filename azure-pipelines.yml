@@ -10,7 +10,6 @@ steps:
   inputs:
     versionSpec: '18.x'
   displayName: 'Install Node.js'
-  workingDirectory: $(Build.SourcesDirectory)
 
 - script: |
     npm install --global yarn
