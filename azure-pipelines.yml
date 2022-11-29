@@ -10,22 +10,22 @@ steps:
   inputs:
     versionSpec: '18.x'
   displayName: 'Install Node.js'
-  workingDirectory: ./
+  workingDirectory: $(Build.SourcesDirectory)
 
 - script: |
     npm install --global yarn
   displayName: 'yarn install'
-  workingDirectory: ./
+  workingDirectory: $(Build.SourcesDirectory)
 
 - script: |
     yarn install
   displayName: 'npm build'
-  workingDirectory: ./
+  workingDirectory: $(Build.SourcesDirectory)
 
 - script: |
     yarn install
   displayName: 'npm build'
-  workingDirectory: ./frontend
+  workingDirectory: $(Build.SourcesDirectory)/frontend
 
 # container: node:18-bullseye-slim@sha256:f32c970581a901560815b9af1aebbc164c86b9be922dda3b9f3b65f653e61776
 
