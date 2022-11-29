@@ -63,12 +63,12 @@ steps:
 - task: DockerCompose@0
   inputs:
     action: 'Run services'
-    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-    containerregistrytype: $(azureContainerRegistry)
+    containerregistrytype: 'Azure Container Registry'
     dockerComposeFile: 'docker-compose.yml'
     buildImages: true
     abortOnContainerExit: true
     detached: false
+
 
 # container: node:18-bullseye-slim@sha256:f32c970581a901560815b9af1aebbc164c86b9be922dda3b9f3b65f653e61776
 
