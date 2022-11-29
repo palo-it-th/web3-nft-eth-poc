@@ -19,29 +19,33 @@ steps:
   displayName: 'Intall: Yarn'
   workingDirectory: $(Build.SourcesDirectory)
 
-- script: |
-    yarn install
-  displayName: 'Hardhat: yarn install'
-  workingDirectory: $(Build.SourcesDirectory)
-
-- script: |
-    yarn install
-  displayName: 'Frontend: yarn install'
-  workingDirectory: $(Build.SourcesDirectory)/frontend
-
 # Cache hardhat node modules
 - task: Cache@2
   displayName: 'Cache: Hardhat node modules'
   inputs:
-    key: hardhat_node_modules
+    key: 'yarn | "$(Agent.OS)" | $(Build.SourcesDirectory)/yarn.lock'
     path: $(System.DefaultWorkingDirectory)/node_modules
+    cacheHitVar: HARDHAT_CACHE_RESTORED
+
+- script: |
+    yarn install
+  displayName: 'Hardhat: yarn install'
+  workingDirectory: $(Build.SourcesDirectory)
+  condition: ne(variables.HARDHAT_CACHE_RESTORED, 'true')
 
 # Cache frontend node modules
 - task: Cache@2
   displayName: 'Cache: Frontend node modules'
   inputs:
-    key: hardhat_node_modules
+    key: 'yarn | "$(Agent.OS)" | $(Build.SourcesDirectory)/frontend/yarn.lock'
     path: $(System.DefaultWorkingDirectory)/frontend/node_modules
+    cacheHitVar: FRONTEND_CACHE_RESTORED
+
+- script: |
+    yarn install
+  displayName: 'Frontend: yarn install'
+  workingDirectory: $(Build.SourcesDirectory)/frontend
+  condition: ne(variables.FRONTEND_CACHE_RESTORED, 'true')
 
 - script: |
     npx hardhat compile
