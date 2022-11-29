@@ -5,7 +5,6 @@ pool:
   vmImage: ubuntu-latest
   
 variables:
-  imageName: 'synpress-main'
   DOCKER_BUILDKIT: 1
 
 # Install node (quickly)
@@ -63,24 +62,13 @@ steps:
   displayName: 'Hardhat: Test smart contracts'
   workingDirectory: $(Build.SourcesDirectory)
 
-# Build docker image for e2e testing
-- task: Docker@2
-  displayName: 'E2E: Build docker image'
-  inputs:
-    repository: $(imageName)
-    command: build
-    Dockerfile: Dockerfile
-
-# Run e2e tests using above image
+# Build image using Dockerfile & run e2e tests
 - task: DockerCompose@0
   displayName: 'E2E: Execute e2e tests'
   inputs:
     action: 'Run services'
     containerregistrytype: 'Azure Container Registry'
     dockerComposeFile: 'docker-compose.yml'
-    dockerComposeFileArgs: |
-      DEBUG=true
-      NETWORK_NAME=localhost
     buildImages: true
     abortOnContainerExit: true
     detached: false
