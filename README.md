@@ -49,7 +49,7 @@ npm i -g ipfs
 #### Initialize ipfs local profile
 
 ```
-ipfs init
+jsipfs init
 ```
 
 #### Allow cross origin on the jsipfs node
