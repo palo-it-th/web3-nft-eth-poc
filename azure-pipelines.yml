@@ -8,18 +8,20 @@ variables:
   imageName: 'synpress-main'
   DOCKER_BUILDKIT: 1
 
+# Install node (quickly)
 steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '18.x'
   displayName: 'Install: Node.js'
 
+# Install yarn
 - script: |
     npm install --global yarn
   displayName: 'Intall: Yarn'
   workingDirectory: $(Build.SourcesDirectory)
 
-# Cache hardhat node modules
+# Cache/restore hardhat node modules if yarn.lock changed
 - task: Cache@2
   displayName: 'Cache: Hardhat node modules'
   inputs:
@@ -27,13 +29,14 @@ steps:
     path: $(System.DefaultWorkingDirectory)/node_modules
     cacheHitVar: HARDHAT_CACHE_RESTORED
 
+# Yarn install hardhat
 - script: |
     yarn install
   displayName: 'Hardhat: yarn install'
   workingDirectory: $(Build.SourcesDirectory)
   condition: ne(variables.HARDHAT_CACHE_RESTORED, 'true')
 
-# Cache frontend node modules
+# Cache/restore frontend node modules if yarn.lock changed
 - task: Cache@2
   displayName: 'Cache: Frontend node modules'
   inputs:
@@ -41,22 +44,26 @@ steps:
     path: $(System.DefaultWorkingDirectory)/frontend/node_modules
     cacheHitVar: FRONTEND_CACHE_RESTORED
 
+# Yarn install frontend
 - script: |
     yarn install
   displayName: 'Frontend: yarn install'
   workingDirectory: $(Build.SourcesDirectory)/frontend
   condition: ne(variables.FRONTEND_CACHE_RESTORED, 'true')
 
+# Hardhat compile
 - script: |
     npx hardhat compile
   displayName: 'Hardhat: Compile smart contracts'
   workingDirectory: $(Build.SourcesDirectory)
 
+# Hardhat test
 - script: |
     npx hardhat test
   displayName: 'Hardhat: Test smart contracts'
   workingDirectory: $(Build.SourcesDirectory)
 
+# Build docker image for e2e testing
 - task: Docker@2
   displayName: 'E2E: Build docker image'
   inputs:
@@ -64,6 +71,7 @@ steps:
     command: build
     Dockerfile: frontend/Dockerfile
 
+# Run e2e tests using above image
 - task: DockerCompose@0
   displayName: 'E2E: Execute e2e tests'
   inputs:
@@ -72,6 +80,7 @@ steps:
     dockerComposeFile: 'docker-compose.yml'
     dockerComposeFileArgs: |
       DEBUG=true
+      NETWORK_NAME=localhost
     buildImages: true
     abortOnContainerExit: true
     detached: false
