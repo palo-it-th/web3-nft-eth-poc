@@ -12,13 +12,14 @@ interface NftCardListProps {
 }
 
 const NftCardList = ({ contractDetails }: NftCardListProps) => {
-
   if (contractDetails.nftList.length === 0) {
     return (
       <WatermarkContainer>
-        <Watermark title={'you Have No NFTs'}
-                   subtitle={'Please click mint NFT to Mint one.'}
-                   icon={<EmptyBoxIcon />} />
+        <Watermark
+          title={'you Have No NFTs'}
+          subtitle={'Please click mint NFT to Mint one.'}
+          icon={<EmptyBoxIcon />}
+        />
       </WatermarkContainer>
     )
   }
@@ -26,9 +27,12 @@ const NftCardList = ({ contractDetails }: NftCardListProps) => {
   return (
     <Grid2 container spacing={3} maxWidth={1136}>
       {contractDetails.nftList.map(({ nftImageCID, nftMetadataCID }, index) => (
-        <Grid2 xs={6} sm={4} md={3} key={index}>
-          <NftCard image={nftImageCID.imageSrc} title={nftMetadataCID}
-                   data-testid={`nftImage-${index}`} />
+        <Grid2 key={index}>
+          <NftCard
+            image={nftImageCID.imageSrc}
+            title={nftMetadataCID}
+            data-testid={`nftImage-${index}`}
+          />
         </Grid2>
       ))}
     </Grid2>

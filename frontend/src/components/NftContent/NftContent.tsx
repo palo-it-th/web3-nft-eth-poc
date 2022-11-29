@@ -24,19 +24,6 @@ const NftContent = ({ contract, currentAccount }: NftContentProps) => {
     [],
   )
 
-  const readNftMetadata = useCallback(
-    async (cidPath: string) => {
-      const response = ipfsClient.cat(cidPath)
-
-      for await (const x of response) {
-        const response = JSON.parse(new TextDecoder().decode(x))
-        const imageSrc = await readNftImage(response.image)
-        return { ...response, imageSrc }
-      }
-    },
-    [ipfsClient],
-  )
-
   const readNftImage = useCallback(
     async (cidPath: string) => {
       const response = ipfsClient.cat(cidPath)
@@ -48,15 +35,28 @@ const NftContent = ({ contract, currentAccount }: NftContentProps) => {
     [ipfsClient],
   )
 
+  const readNftMetadata = useCallback(
+    async (cidPath: string) => {
+      const response = ipfsClient.cat(cidPath)
+
+      for await (const x of response) {
+        const response = JSON.parse(new TextDecoder().decode(x))
+        const imageSrc = await readNftImage(response.image)
+        return { ...response, imageSrc }
+      }
+    },
+    [ipfsClient, readNftImage],
+  )
+
   const readNft = useCallback(
     async (index: Number) => {
       const nftId = await contract.tokenOfOwnerByIndex(currentAccount, index)
       const nftMetadataCID = await contract.tokenURI(nftId)
-      const nftImageCID = (await readNftMetadata(nftMetadataCID))
+      const nftImageCID = await readNftMetadata(nftMetadataCID)
 
       return { nftId, nftMetadataCID, nftImageCID }
     },
-    [contract, currentAccount, readNftImage, readNftMetadata],
+    [contract, currentAccount, readNftMetadata],
   )
 
   const initContractDetails = useCallback(async () => {
@@ -118,6 +118,5 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px
+  gap: 24px;
 `
-
