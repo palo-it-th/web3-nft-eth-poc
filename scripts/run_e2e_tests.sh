@@ -1,5 +1,6 @@
 #!/bin/bash
 
+npx cypress install
 nohup npx hardhat node & > hardhat_node.log &
 npx jsipfs init
 npx jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
