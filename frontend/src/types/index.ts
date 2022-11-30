@@ -1,2 +1,2 @@
-export * from './nft'
-export * from './contractDetails'
+export * from './Nft'
+export * from './ContractDetails'

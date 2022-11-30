@@ -42,19 +42,25 @@ const NftContent = ({ contract, currentAccount }: NftContentProps) => {
       for await (const x of response) {
         const response = JSON.parse(new TextDecoder().decode(x))
         const imageSrc = await readNftImage(response.image)
-        return { ...response, imageSrc }
+        return { name: response.name, imageSrc }
       }
     },
     [ipfsClient, readNftImage],
   )
 
   const readNft = useCallback(
-    async (index: Number) => {
+    async (index: Number): Promise<Nft> => {
       const nftId = await contract.tokenOfOwnerByIndex(currentAccount, index)
       const nftMetadataCID = await contract.tokenURI(nftId)
-      const nftImageCID = await readNftMetadata(nftMetadataCID)
+      const metadata = await readNftMetadata(nftMetadataCID)
 
-      return { nftId, nftMetadataCID, nftImageCID }
+      const myNft: Nft = {
+        id: nftId,
+        name: metadata?.name,
+        image: metadata?.imageSrc,
+      }
+
+      return myNft
     },
     [contract, currentAccount, readNftMetadata],
   )
@@ -72,7 +78,7 @@ const NftContent = ({ contract, currentAccount }: NftContentProps) => {
     const nftList: Nft[] = []
     for (let i = 0; i < balance; i++) {
       const nft = await readNft(i)
-      if (nft) nftList.push(nft)
+      nft && nftList.push(nft)
     }
 
     setContractDetails({

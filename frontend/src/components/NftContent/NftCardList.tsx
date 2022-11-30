@@ -26,11 +26,11 @@ const NftCardList = ({ contractDetails }: NftCardListProps) => {
 
   return (
     <Grid2 container spacing={3} maxWidth={1136}>
-      {contractDetails.nftList.map(({ nftImageCID, nftMetadataCID }, index) => (
+      {contractDetails.nftList.map(({ image, name }, index) => (
         <Grid2 key={index}>
           <NftCard
-            image={nftImageCID.imageSrc}
-            title={nftMetadataCID}
+            image={image}
+            title={name}
             testId={`nft-card-${index}`}
           />
         </Grid2>
