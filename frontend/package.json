@@ -48,6 +48,7 @@
     "@bahmutov/cypress-esbuild-preprocessor": "^2.1.5",
     "@synthetixio/synpress": "^2.4.1",
     "cypress": "^10.10.0",
+    "cypress-file-upload": "^5.0.8",
     "wait-on": "^6.0.1"
   }
 }

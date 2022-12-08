@@ -38,7 +38,7 @@ const Dropzone = ({ onAddImageHandler }: DropzoneProps) => {
 
   return (
     <div {...getRootProps({ style })}>
-      <input {...getInputProps()} />
+      <input data-testid='image-input' {...getInputProps()} />
       <p>Drag&drop the image here, or click to select an image</p>
     </div>
   )

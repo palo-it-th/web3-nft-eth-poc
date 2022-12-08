@@ -101,6 +101,7 @@ const MintNftButton = ({
             fullWidth
             variant='standard'
             onChange={onNameChangeHandler}
+            data-testid='nft-name'
           />
 
           <>
@@ -117,7 +118,9 @@ const MintNftButton = ({
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={mintNft}>Mint</Button>
+          <Button data-testid='confirm-mint-nft' onClick={mintNft}>
+            Mint
+          </Button>
         </DialogActions>
       </Dialog>
     </>

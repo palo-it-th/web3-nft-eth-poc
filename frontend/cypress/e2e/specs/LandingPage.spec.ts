@@ -1,11 +1,15 @@
 import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 import { ellipsisAccount } from '../../../src/utils/accountUtils'
+import 'cypress-file-upload'
 
 Then('The displayed account should be the current metamask account', () => {
   cy.getMetamaskWalletAddress().then(currentAddress => {
-    cy.get('[data-testid="account-address"]').contains(ellipsisAccount(currentAddress), {
-      matchCase: false,
-    })
+    cy.get('[data-testid="account-address"]').contains(
+      ellipsisAccount(currentAddress),
+      {
+        matchCase: false,
+      },
+    )
   })
 })
 
@@ -18,11 +22,12 @@ Given('The number of nfts displayed is {int}', nftsNumber => {
 })
 
 When('I mint a new nft', () => {
-  cy.get('[data-testid="mint-nft"]').within(() => {
-    cy.fixture('images/monkey1.webp', null).then(image => {
-      cy.get('input[type=file]').selectFile(image, { force: true })
-    })
+  cy.get('[data-testid="mint-nft"]').click()
+  cy.get('[data-testid="nft-name"]').type('Image name')
+  cy.get('input[type=file]').attachFile('images/monkey1.jpg', {
+    subjectType: 'drag-n-drop',
   })
+  cy.get('[data-testid="confirm-mint-nft"]').click()
   cy.confirmMetamaskTransaction()
 })
 
