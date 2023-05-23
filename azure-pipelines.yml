@@ -1,79 +1,77 @@
 trigger:
-- main
+  - main
 
 pool:
   vmImage: ubuntu-latest
-  
+
 variables:
   DOCKER_BUILDKIT: 1
 
 # Install node (quickly)
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '18.x'
-  displayName: 'Install: Node.js'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "18.x"
+    displayName: "Install: Node.js"
 
-# # Install yarn
-# - script: |
-#     npm install --global yarn
-#   displayName: 'Intall: Yarn'
-#   workingDirectory: $(Build.SourcesDirectory)
+  # # Install yarn
+  # - script: |
+  #     npm install --global yarn
+  #   displayName: 'Intall: Yarn'
+  #   workingDirectory: $(Build.SourcesDirectory)
 
-# Cache/restore hardhat node modules if yarn.lock changed
-- task: Cache@2
-  displayName: 'Cache: Hardhat node modules'
-  inputs:
-    key: 'yarn | "$(Agent.OS)" | $(Build.SourcesDirectory)/yarn.lock'
-    path: $(System.DefaultWorkingDirectory)/node_modules
-    cacheHitVar: HARDHAT_CACHE_RESTORED
+  # Cache/restore hardhat node modules if yarn.lock changed
+  - task: Cache@2
+    displayName: "Cache: Hardhat node modules"
+    inputs:
+      key: 'yarn | "$(Agent.OS)" | $(Build.SourcesDirectory)/yarn.lock'
+      path: $(System.DefaultWorkingDirectory)/node_modules
+      cacheHitVar: HARDHAT_CACHE_RESTORED
 
-# Yarn install hardhat
-- script: |
-    yarn install
-  displayName: 'Hardhat: yarn install'
-  workingDirectory: $(Build.SourcesDirectory)
-  condition: ne(variables.HARDHAT_CACHE_RESTORED, 'true')
+  # Yarn install hardhat
+  - script: |
+      yarn install
+    displayName: "Hardhat: yarn install"
+    workingDirectory: $(Build.SourcesDirectory)
+    condition: ne(variables.HARDHAT_CACHE_RESTORED, 'true')
 
-# Cache/restore frontend node modules if yarn.lock changed
-- task: Cache@2
-  displayName: 'Cache: Frontend node modules'
-  inputs:
-    key: 'yarn | "$(Agent.OS)" | $(Build.SourcesDirectory)/frontend/yarn.lock'
-    path: $(System.DefaultWorkingDirectory)/frontend/node_modules
-    cacheHitVar: FRONTEND_CACHE_RESTORED
+  # Cache/restore frontend node modules if yarn.lock changed
+  - task: Cache@2
+    displayName: "Cache: Frontend node modules"
+    inputs:
+      key: 'yarn | "$(Agent.OS)" | $(Build.SourcesDirectory)/frontend/yarn.lock'
+      path: $(System.DefaultWorkingDirectory)/frontend/node_modules
+      cacheHitVar: FRONTEND_CACHE_RESTORED
 
-# Yarn install frontend
-- script: |
-    yarn install
-  displayName: 'Frontend: yarn install'
-  workingDirectory: $(Build.SourcesDirectory)/frontend
-  condition: ne(variables.FRONTEND_CACHE_RESTORED, 'true')
+  # Hardhat compile
+  - script: |
+      npx hardhat compile
+    displayName: "Hardhat: Compile smart contracts"
+    workingDirectory: $(Build.SourcesDirectory)
 
-# Hardhat compile
-- script: |
-    npx hardhat compile
-  displayName: 'Hardhat: Compile smart contracts'
-  workingDirectory: $(Build.SourcesDirectory)
+  # Hardhat test
+  - script: |
+      npx hardhat test
+    displayName: "Hardhat: Test smart contracts"
+    workingDirectory: $(Build.SourcesDirectory)
 
-# Hardhat test
-- script: |
-    npx hardhat test
-  displayName: 'Hardhat: Test smart contracts'
-  workingDirectory: $(Build.SourcesDirectory)
+  # Yarn install frontend
+  - script: |
+      yarn install
+    displayName: "Frontend: yarn install"
+    workingDirectory: $(Build.SourcesDirectory)/frontend
+    condition: ne(variables.FRONTEND_CACHE_RESTORED, 'true')
 
-# Build image using Dockerfile & run e2e tests
-- task: DockerCompose@0
-  displayName: 'E2E: Execute e2e tests'
-  inputs:
-    action: 'Run services'
-    containerregistrytype: 'Azure Container Registry'
-    dockerComposeFile: 'docker-compose.yml'
-    buildImages: true
-    abortOnContainerExit: true
-    detached: false
-
-
+  # Build image using Dockerfile & run e2e tests
+  - task: DockerCompose@0
+    displayName: "E2E: Execute e2e tests"
+    inputs:
+      action: "Run services"
+      containerregistrytype: "Azure Container Registry"
+      dockerComposeFile: "docker-compose.yml"
+      buildImages: true
+      abortOnContainerExit: true
+      detached: false
 # container: node:18-bullseye-slim@sha256:f32c970581a901560815b9af1aebbc164c86b9be922dda3b9f3b65f653e61776
 
 # variables:
