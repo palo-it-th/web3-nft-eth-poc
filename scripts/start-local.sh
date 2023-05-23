@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install dependencies
-yarn
+yarn install --frozen-lockfile
 
 echo ========
 echo Start local blockchain node in the background...
@@ -50,10 +50,11 @@ echo ========
 echo Install frontend dependencies...
 echo ========
 echo
-yarn
+yarn install --frozen-lockfile
 
 echo ========
 echo Start the frontend...
 echo ========
 echo
 yarn run start
+trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
