@@ -15,7 +15,7 @@ done
 
 echo ========
 echo Deploy script using localhost network...
-echo ========\n
+echo ========
 echo
 npx hardhat --network localhost run deploy_palonft.js
 
