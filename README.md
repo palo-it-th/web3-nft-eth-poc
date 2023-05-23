@@ -20,7 +20,7 @@ You must have the latest "LTS" node version installed :
 
 ## Installation
 
-- Run `npm install`
+- Run `yarn install`
 
 ## Run
 
@@ -76,7 +76,7 @@ jsipfs daemon
 #### Installation
 
 ```
-npm install
+yarn install
 ```
 
 #### Setting up Metamask extension
@@ -98,10 +98,16 @@ npm start
 
 ## Test
 
-### Solidity smart contracts
+### Solidity smart contracts test
 
 ```
 npx hardhat test
+```
+
+### Solidity smart contracts with coverage
+
+```
+npx hardhat coverage
 ```
 
 Test coverage is generated in the `coverage` folder and can be viewed using a browser.

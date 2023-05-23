@@ -55,4 +55,9 @@ contract PaloNFT is ERC721, ERC721URIStorage, ERC721Enumerable {
     {
         return super.supportsInterface(interfaceId);
     }
+
+    function burn(uint256 tokenId) public {
+        require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: burn caller is not owner nor approved");
+        _burn(tokenId);
+    }
 }
