@@ -5,7 +5,8 @@ yarn
 
 echo ========
 echo Start local blockchain node in the background...
-echo ========\n
+echo ========
+echo
 npx hardhat node &
 # Wait until hardhat node is accessible
 while ! nc -z localhost 8545; do   
@@ -15,27 +16,31 @@ done
 echo ========
 echo Deploy script using localhost network...
 echo ========\n
+echo
 npx hardhat --network localhost run deploy_palonft.js
 
 echo ========
-echo Install IPFS globallyl...
-echo ========\n
+echo Install IPFS globally...
+echo ========
+echo
 npm i -g ipfs
 
 echo ========
 echo Initialize IPFS...
-echo ========\n
+echo ========
 jsipfs init
 
 echo ========
 echo Configure IPFS for cross-origin access...
-echo ========\n
+echo ========
+echo
 jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
 jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
 
 echo ========
 echo Start IPFS daemon in the background...
-echo ========\n
+echo ========
+echo
 jsipfs daemon &
 
 # Move to frontend directory
@@ -43,10 +48,12 @@ cd ../frontend
 
 echo ========
 echo Install frontend dependencies...
-echo ========\n
+echo ========
+echo
 yarn
 
 echo ========
 echo Start the frontend...
-echo ========\n
+echo ========
+echo
 yarn run start
