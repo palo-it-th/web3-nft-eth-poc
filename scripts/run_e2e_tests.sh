@@ -20,7 +20,7 @@ yarn install
 print_section_info "Start local blockchain node in the background..."
 npx hardhat node &
 # Wait until hardhat node is accessible
-while ! nc -z localhost $1; do   
+while ! nc -z localhost 8545; do   
 sleep 0.1
 done
 
