@@ -22,8 +22,8 @@ services:
     networks:
       - x11
     volumes:
-      - ./docker/videos:/app/tests/e2e/videos
-      - ./docker/screenshots:/app/tests/e2e/screenshots
+      - ./docker/videos:/app/frontend/cypress/videos
+      - ./docker/screenshots:/app/frontend/cypress/screenshots
 
   display:
     container_name: display
