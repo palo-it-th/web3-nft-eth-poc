@@ -20,7 +20,9 @@ yarn install
 print_section_info "Start local blockchain node in the background..."
 npx hardhat node &
 # Wait until hardhat node is accessible
-wait_for_port_open 8545
+while ! nc -z localhost $1; do   
+sleep 0.1
+done
 
 print_section_info "Deploy script using localhost network..."
 npx hardhat --network localhost run deploy_palonft.js
