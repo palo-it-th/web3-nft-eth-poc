@@ -14,24 +14,25 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
 import '@synthetixio/synpress/support'
+import './commands'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 before(() => {
-  cy.setupMetamask(
-    'test, test, test, test, test, test, test, test, test, test, test, junk',
-    {
-      networkName: 'localhost',
-      rpcUrl: 'http://127.0.0.1:8545',
-      chainId: '1337',
-      symbol: 'ETH',
-      isTestnet: true,
-    },
-    'testpassword',
-  )
-
-  cy.resetMetamaskAccount()
+  // cy
+  //   .setupMetamask
+  // 'test, test, test, test, test, test, test, test, test, test, test, junk',
+  // {
+  //   networkName: 'localhost',
+  //   rpcUrl: 'http://127.0.0.1:8545',
+  //   chainId: 1337,
+  //   symbol: 'ETH',
+  //   isTestnet: false,
+  // },
+  // 'testpassword',
+  // ()
+  // cy.resetMetamaskAccount()
+  cy.changeMetamaskNetwork('localhost')
 })
 
 beforeEach(() => {

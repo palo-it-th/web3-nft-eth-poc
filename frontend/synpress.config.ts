@@ -1,8 +1,8 @@
-import { defineConfig } from 'cypress'
-import createBundler from '@bahmutov/cypress-esbuild-preprocessor'
 import { addCucumberPreprocessorPlugin } from '@badeball/cypress-cucumber-preprocessor'
 import { createEsbuildPlugin } from '@badeball/cypress-cucumber-preprocessor/esbuild'
+import createBundler from '@bahmutov/cypress-esbuild-preprocessor'
 import synpressPlugins from '@synthetixio/synpress/plugins'
+import { defineConfig } from 'cypress'
 
 export default defineConfig({
   e2e: {
@@ -14,13 +14,19 @@ export default defineConfig({
       synpressPlugins(on, config)
 
       on('file:preprocessor', bundler)
+      // Sets up metamask with network and private key supplied by .env.local file
+      on('before:run', details => {
+        cy.setupMetamask()
+      })
       await addCucumberPreprocessorPlugin(on, config)
 
       return config
     },
     specPattern: 'cypress/e2e/features/**/*.feature',
     baseUrl: 'http://localhost:3000',
-    chromeWebSecurity: true,
     supportFile: 'cypress/support/e2e.ts',
+    chromeWebSecurity: true,
+    video: true,
+    screenshotOnRunFailure: true,
   },
 })

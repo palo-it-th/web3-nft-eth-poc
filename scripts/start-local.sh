@@ -1,68 +1,54 @@
 #!/bin/bash
 
+print_section_info () {
+  echo
+  echo ==================================================
+  echo $1
+  echo ==================================================
+  echo
+}
+
+wait_for_port_open () {
+  while ! nc -z localhost $1; do   
+    sleep 0.1
+  done
+}
+
 # Install dependencies
 yarn install --frozen-lockfile
 
-echo
-echo ========================================
-echo Start local blockchain node in the background...
-echo ========================================
-echo
+print_section_info "Start local blockchain node in the background..."
 npx hardhat node &
 # Wait until hardhat node is accessible
-while ! nc -z localhost 8545; do   
-  sleep 0.1
-done
+wait_for_port_open 8545
 
-echo
-echo ========================================
-echo Deploy script using localhost network...
-echo ========================================
-echo
+
+print_section_info "Deploy script using localhost network..."
+
 npx hardhat --network localhost run deploy_palonft.js
 
-echo
-echo ========================================
-echo Install IPFS globally...
-echo ========================================
-echo
-npm i -g ipfs
+print_section_info "Install IPFS globally..."
+yarn global add ipfs
 
-echo
-echo ========================================
-echo Initialize IPFS...
-echo ========================================
+print_section_info Initialize IPFS...
 jsipfs init
 
-echo
-echo ========================================
-echo Configure IPFS for cross-origin access...
-echo ========================================
-echo
+
+print_section_info "Configure IPFS for cross-origin access..."
 jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
 jsipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
 
-echo
-echo ========================================
-echo Start IPFS daemon in the background...
-echo ========================================
-echo
+print_section_info "Start IPFS daemon in the background..."
 jsipfs daemon &
 
 # Move to frontend directory
 cd ../frontend
 
-echo
-echo ========================================
-echo Install frontend dependencies...
-echo ========================================
-echo
+print_section_info "Install frontend dependencies..."
 yarn install --frozen-lockfile
 
-echo
-echo ========================================
-echo Start the frontend...
-echo ========================================
-echo
+print_section_info "Start the frontend..."
 yarn run start
+
+# Kills all sub-processes
 trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
