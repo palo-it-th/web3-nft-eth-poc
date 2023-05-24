@@ -73,8 +73,8 @@ steps:
       abortOnContainerExit: true
       detached: false
     env:
-      DISPLAY_HEIGHT: 768
-      DISPLAY_WIDTH: 1366
+      DISPLAY_HEIGHT: 1080
+      DISPLAY_WIDTH: 1920
       SE_SCREEN_WIDTH: 1366
       SE_SCREEN_HEIGHT: 768
 

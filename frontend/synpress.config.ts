@@ -25,6 +25,8 @@ export default defineConfig({
     specPattern: 'cypress/e2e/features/**/*.feature',
     baseUrl: 'http://localhost:3000',
     supportFile: 'cypress/support/e2e.ts',
+    screenshotsFolder: 'tests/e2e/screenshots',
+    videosFolder: 'tests/e2e/videos',
     chromeWebSecurity: true,
     video: true,
     screenshotOnRunFailure: true,
