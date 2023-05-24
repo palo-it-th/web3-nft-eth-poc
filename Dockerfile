@@ -1,8 +1,9 @@
 # syntax=docker/dockerfile:1
-FROM synthetixio/docker-e2e:16.17-ubuntu as base
+FROM --platform=linux/amd64 synthetixio/docker-e2e:18.16-debian as base
 
 RUN mkdir /app
 WORKDIR /app
+RUN apt-get update && apt-get install netcat -y
 
 # Don't copy as everything is already copied in the last step
 # COPY node_modules ./node_modules
