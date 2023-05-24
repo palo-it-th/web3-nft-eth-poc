@@ -23,6 +23,7 @@ npx hardhat node &
 while ! nc -z localhost 8545; do   
 sleep 0.1
 done
+sleep 3
 
 print_section_info "Deploy script using localhost network..."
 npx hardhat --network localhost run deploy_palonft.js
