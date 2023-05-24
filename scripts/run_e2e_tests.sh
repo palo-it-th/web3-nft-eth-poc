@@ -15,7 +15,7 @@ wait_for_port_open () {
 }
 
 # Install hardhat dependencies
-yarn install --frozen-lockfile
+yarn install
 
 print_section_info "Start local blockchain node in the background..."
 npx hardhat node &
@@ -42,7 +42,7 @@ jsipfs daemon &
 cd ../frontend
 
 print_section_info "Install frontend dependencies..."
-yarn install --frozen-lockfile
+yarn install
 
 
 print_section_info "Installing cypress..."
