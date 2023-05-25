@@ -11,20 +11,14 @@ variables:
 steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: "16.x"
+      versionSpec: "18.x"
     displayName: "Install: Node.js"
-
-  # # Install yarn
-  # - script: |
-  #     npm install --global yarn
-  #   displayName: 'Intall: Yarn'
-  #   workingDirectory: $(Build.SourcesDirectory)
 
   # Cache/restore hardhat node modules if yarn.lock changed
   - task: Cache@2
     displayName: "Cache: Hardhat node modules"
     inputs:
-      key: 'yarn | "$(Agent.OS)" | $(Build.SourcesDirectory)/yarn.lock'
+      key: 'yarn | "$(Agent.OS)" | hardhat | $(Build.SourcesDirectory)/yarn.lock'
       path: $(System.DefaultWorkingDirectory)/node_modules
       cacheHitVar: HARDHAT_CACHE_RESTORED
 
@@ -39,7 +33,7 @@ steps:
   - task: Cache@2
     displayName: "Cache: Frontend node modules"
     inputs:
-      key: 'yarn | "$(Agent.OS)" | $(Build.SourcesDirectory)/frontend/yarn.lock'
+      key: 'yarn | "$(Agent.OS)" | frontend | $(Build.SourcesDirectory)/frontend/yarn.lock'
       path: $(System.DefaultWorkingDirectory)/frontend/node_modules
       cacheHitVar: FRONTEND_CACHE_RESTORED
 

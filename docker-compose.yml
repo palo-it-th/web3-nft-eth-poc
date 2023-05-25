@@ -6,11 +6,7 @@ services:
     build: .
     environment:
       - DISPLAY=display:0.0
-      # - PRIVATE_KEY=${PRIVATE_KEY}
-      # - GITHUB_TOKEN=${GITHUB_TOKEN}
       - DEBUG=true
-      # - GH_PAT=${GH_PAT}
-      # - GH_USERNAME=${GH_USERNAME}
     depends_on:
       - display
     entrypoint: []
@@ -18,7 +14,7 @@ services:
     command: >
       bash -c 'echo -n "======> local noVNC URL:
       http://localhost:8080/vnc.html?autoconnect=true " && npx wait-on
-      http://display:8080 && cd ./scripts && ./run_e2e_tests.sh'
+      http://display:8080 && cd ./scripts && ./run_e2e_tests_ci.sh'
     networks:
       - x11
     volumes:

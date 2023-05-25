@@ -14,11 +14,14 @@ wait_for_port_open () {
   done
 }
 
-print_section_info "Node version"
-node -v
+source $NVM_DIR/nvm.sh
+nvm use 18.14.2
+NODE_VERSION=$(node -v)
+print_section_info "Node version: $NODE_VERSION"
+
 
 # Install hardhat dependencies
-yarn install
+yarn install --frozen-lockfile
 
 print_section_info "Start local blockchain node in the background..."
 npx hardhat node &
@@ -28,8 +31,11 @@ sleep 0.1
 done
 sleep 3
 
+print_section_info "Compiling smart contract..."
+npx hardhat compile
+
 print_section_info "Deploy script using localhost network..."
-npx hardhat --network localhost run deploy_palonft.js
+npx hardhat run deploy_palonft.js --network localhost
 
 print_section_info "Install IPFS globally..."
 yarn global add ipfs
@@ -48,8 +54,7 @@ jsipfs daemon &
 cd ../frontend
 
 print_section_info "Install frontend dependencies..."
-yarn install
-
+yarn install --frozen-lockfile
 
 print_section_info "Installing cypress..."
 yarn global add cypress
