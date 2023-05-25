@@ -11,7 +11,7 @@ variables:
 steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: "18.x"
+      versionSpec: "18.14.2"
     displayName: "Install: Node.js"
 
   # Cache/restore hardhat node modules if yarn.lock changed
@@ -63,7 +63,7 @@ steps:
       action: "Run services"
       containerregistrytype: "Azure Container Registry"
       dockerComposeFile: "docker-compose.yml"
-      dockerComposeCommand: "--exit-code-from"
+      dockerComposeCommand: "--exit-code-from synpress"
       buildImages: true
       abortOnContainerExit: true
       detached: false
