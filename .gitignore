@@ -17,3 +17,6 @@ artifacts
 
 *.log
 nohup.out
+
+docker/screenshots
+docker/videos

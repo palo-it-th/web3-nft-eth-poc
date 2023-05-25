@@ -63,6 +63,7 @@ steps:
       action: "Run services"
       containerregistrytype: "Azure Container Registry"
       dockerComposeFile: "docker-compose.yml"
+      dockerComposeCommand: "--exit-code-from"
       buildImages: true
       abortOnContainerExit: true
       detached: false
@@ -77,6 +78,3 @@ steps:
 
   - publish: $(System.DefaultWorkingDirectory)/docker/videos
     artifact: videos
-
-  - publish: $(System.DefaultWorkingDirectory)/docker/videos-ci
-    artifact: videos-ci
