@@ -27,7 +27,7 @@ steps:
 
   # Yarn install hardhat
   - script: |
-      yarn install
+      yarn install --frozen-lockfile
     displayName: "Hardhat: yarn install"
     workingDirectory: $(BACKEND_DIR)
     condition: ne(variables.HARDHAT_CACHE_RESTORED, 'true')
@@ -54,7 +54,7 @@ steps:
 
   # Yarn install frontend
   - script: |
-      yarn install
+      yarn install --frozen-lockfile
     displayName: "Frontend: yarn install"
     workingDirectory: $(FRONTEND_DIR)
     condition: ne(variables.FRONTEND_CACHE_RESTORED, 'true')
