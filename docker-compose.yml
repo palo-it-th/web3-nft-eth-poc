@@ -3,6 +3,7 @@ version: "3.9"
 services:
   synpress:
     container_name: synpress
+    platform: linux/amd64
     build: .
     environment:
       - DISPLAY=display:0.0

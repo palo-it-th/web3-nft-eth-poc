@@ -6,11 +6,6 @@
     "test:local": "env-cmd -f ./env/.env.local npx synpress run -cf synpress.config.js",
     "test:testnet": ""
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
-  },
   "devDependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^13.0.3",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.1.5",

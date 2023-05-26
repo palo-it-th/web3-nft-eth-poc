@@ -52,7 +52,7 @@ print_section_info "Install frontend dependencies..."
 yarn install --frozen-lockfile
 
 # print_section_info "Installing cypress..."
-# yarn global add cypress
+yarn global add cypress
 
 print_section_info "Starting e2e test..."
 yarn run start-and-test
