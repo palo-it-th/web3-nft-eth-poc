@@ -6,6 +6,9 @@ pool:
 
 variables:
   DOCKER_BUILDKIT: 1
+  BACKEND_DIR: $(Build.SourcesDirectory)/backend
+  FRONTEND_DIR: $(Build.SourcesDirectory)/frontend
+  E2E_DIR: $(Build.SourcesDirectory)/e2e
 
 # Install node (quickly)
 steps:
@@ -19,14 +22,14 @@ steps:
     displayName: "Cache: Hardhat node modules"
     inputs:
       key: 'yarn | "$(Agent.OS)" | hardhat | $(Build.SourcesDirectory)/backend/yarn.lock'
-      path: $(System.DefaultWorkingDirectory)/backend/node_modules
+      path: $(BACKEND_DIR)/node_modules
       cacheHitVar: HARDHAT_CACHE_RESTORED
 
   # Yarn install hardhat
   - script: |
       yarn install
     displayName: "Hardhat: yarn install"
-    workingDirectory: $(Build.SourcesDirectory)
+    workingDirectory: $(BACKEND_DIR)
     condition: ne(variables.HARDHAT_CACHE_RESTORED, 'true')
 
   # Cache/restore frontend node modules if yarn.lock changed
@@ -34,26 +37,26 @@ steps:
     displayName: "Cache: Frontend node modules"
     inputs:
       key: 'yarn | "$(Agent.OS)" | frontend | $(Build.SourcesDirectory)/frontend/yarn.lock'
-      path: $(System.DefaultWorkingDirectory)/frontend/node_modules
+      path: $(FRONTEND_DIR)/node_modules
       cacheHitVar: FRONTEND_CACHE_RESTORED
 
   # Hardhat compile
   - script: |
       npx hardhat compile
     displayName: "Hardhat: Compile smart contracts"
-    workingDirectory: $(Build.SourcesDirectory)/backend
+    workingDirectory: $(BACKEND_DIR)
 
   # Hardhat test
   - script: |
       npx hardhat test
     displayName: "Hardhat: Test smart contracts"
-    workingDirectory: $(Build.SourcesDirectory)/backend
+    workingDirectory: $(BACKEND_DIR)
 
   # Yarn install frontend
   - script: |
       yarn install
     displayName: "Frontend: yarn install"
-    workingDirectory: $(Build.SourcesDirectory)/frontend
+    workingDirectory: $(FRONTEND_DIR)
     condition: ne(variables.FRONTEND_CACHE_RESTORED, 'true')
 
   # Build image using Dockerfile & run e2e tests
@@ -73,8 +76,8 @@ steps:
       SE_SCREEN_WIDTH: 1366
       SE_SCREEN_HEIGHT: 768
 
-  - publish: $(System.DefaultWorkingDirectory)/docker/screenshots
+  - publish: $(E2E_DIR)/docker/screenshots
     artifact: screenshots
 
-  - publish: $(System.DefaultWorkingDirectory)/docker/videos
+  - publish: $(E2E_DIR)/docker/videos
     artifact: videos
