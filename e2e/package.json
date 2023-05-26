@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test:local": "env-cmd -f ./env/.env.local npx synpress run -cf synpress.config.ts",
+    "test:local": "env-cmd -f ./env/.env.local npx synpress run -cf synpress.config.js",
     "test:testnet": ""
   },
   "eslintConfig": {
