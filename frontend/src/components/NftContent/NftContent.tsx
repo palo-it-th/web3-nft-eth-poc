@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Contract } from 'ethers'
+import styled from '@emotion/styled'
 import { CircularProgress } from '@mui/material'
-import { create, IPFSHTTPClient } from 'ipfs-http-client'
+import { Contract } from 'ethers'
+import { IPFSHTTPClient, create } from 'ipfs-http-client'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { ContractDetails, Nft } from '../../types'
 import MintNftButton from './MintNftButton'
 import NftCardList from './NftCardList'
-import styled from '@emotion/styled'
-import { ContractDetails, Nft } from '../../types'
 
 interface NftContentProps {
   currentAccount: string
@@ -27,6 +27,7 @@ const NftContent = ({ contract, currentAccount }: NftContentProps) => {
   const readNftImage = useCallback(
     async (cidPath: string) => {
       const response = ipfsClient.cat(cidPath)
+      console.log(cidPath)
 
       for await (const x of response) {
         return URL.createObjectURL(new Blob([x.buffer]))
