@@ -19,7 +19,7 @@ steps:
     displayName: "Cache: Hardhat node modules"
     inputs:
       key: 'yarn | "$(Agent.OS)" | hardhat | $(Build.SourcesDirectory)/yarn.lock'
-      path: $(System.DefaultWorkingDirectory)/node_modules
+      path: $(System.DefaultWorkingDirectory)/backend/node_modules
       cacheHitVar: HARDHAT_CACHE_RESTORED
 
   # Yarn install hardhat
@@ -41,13 +41,13 @@ steps:
   - script: |
       npx hardhat compile
     displayName: "Hardhat: Compile smart contracts"
-    workingDirectory: $(Build.SourcesDirectory)
+    workingDirectory: $(Build.SourcesDirectory)/backend
 
   # Hardhat test
   - script: |
       npx hardhat test
     displayName: "Hardhat: Test smart contracts"
-    workingDirectory: $(Build.SourcesDirectory)
+    workingDirectory: $(Build.SourcesDirectory)/backend
 
   # Yarn install frontend
   - script: |
