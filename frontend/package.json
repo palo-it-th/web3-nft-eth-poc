@@ -22,7 +22,7 @@
   "scripts": {
     "start": "FORCE_COLOR=true react-scripts start | cat -",
     "build": "react-scripts build",
-    "test": "env-cmd -f ./env/.env.e2e npx synpress run -cf synpress.config.ts",
+    "test": "cd ../e2e && yarn run test:local",
     "eject": "react-scripts eject",
     "start-and-test": "BROWSER=none start-server-and-test start http://127.0.0.1:3000 test"
   },

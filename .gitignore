@@ -18,5 +18,5 @@ artifacts
 *.log
 nohup.out
 
-docker/screenshots
-docker/videos
+e2e/docker/screenshots/*
+e2e/docker/videos/*

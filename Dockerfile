@@ -17,5 +17,5 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | b
 RUN source $NVM_DIR/nvm.sh && nvm install 18.14.2
 CMD node -v
 
-# Copy rproject into docker image
+# Copy project into docker image
 COPY . .
