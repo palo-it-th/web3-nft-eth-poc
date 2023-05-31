@@ -104,7 +104,7 @@ npm start
 npx hardhat test
 ```
 
-### Solidity smart contracts with coverage
+### Test Solidity smart contracts with coverage
 
 ```
 npx hardhat coverage
