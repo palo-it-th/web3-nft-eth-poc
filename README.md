@@ -20,7 +20,11 @@ You must have the latest "LTS" node version installed :
 
 ## Installation
 
-- Run `yarn install`
+- Go to `/backend` directory
+
+```
+yarn install
+```
 
 ## Run
 
@@ -75,6 +79,8 @@ jsipfs daemon
 
 #### Installation
 
+- Go to `/frontend` directory
+
 ```
 yarn install
 ```
@@ -100,6 +106,8 @@ npm start
 
 ### Solidity smart contracts test
 
+- Go to `/backend` directory
+
 ```
 npx hardhat test
 ```
@@ -115,6 +123,8 @@ Test coverage is generated in the `coverage` folder and can be viewed using a br
 Add `REPORT_GAS=true` in front of the command to test with gas estimation.
 
 ### E2E Tests including the frontend and smart contracts
+
+- Go to `/e2e` directory
 
 Open cypress to run e2e tests
 

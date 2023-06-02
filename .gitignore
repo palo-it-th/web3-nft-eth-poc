@@ -22,3 +22,5 @@ e2e/docker/screenshots/*
 !e2e/docker/screenshots/.gitkeep
 e2e/docker/videos/*
 !e2e/docker/videos/.gitkeep
+
+e2e/cypress/videos/*
